@@ -1,0 +1,73 @@
+left to Do
+{
+    Doodling
+    Alloys
+    Base-2 Palindromes
+    Low Order Zeros
+    Persistent Numbers
+    Pseudoprime numbers
+    Disastrous Downtime
+    Astro
+    Bumper-To-Bumper Traffic
+    artichoke
+    acm
+    Travelling Monk
+    Taxing Problem
+    Erase Securely
+    Pipe Rotation
+    Hot Springs
+    Milestone Counter
+    Prozor
+    Mali
+    Distance
+    Alice in the Digital World
+    Short Sell
+    Floppy Music
+    Short Sell        
+    Unique Snowflakes
+    Saving Princess Peach
+    Bard
+    Best Compromise
+    Falcon Dive
+    Matrix Keypad
+    BASIC Interpreter
+    Flag Quiz
+    Even Up Solitaire
+    Integer Lists
+    Touchscreen Keyboard
+    Citations
+    Credit Card Payment
+    Not Amused
+    Game of Throwns
+    Primary Arithmetic
+    Paintings
+    Class Picture
+    A towering Problem
+    Victory Through Synergy
+    A Furious Cocktail
+}
+
+book
+{
+    Climbing Stairs
+    Driver's Dilemma
+    Exactly Electrical
+    Prerequisites?
+    Battle Simulation
+    Bits Equalizer
+    Fast Food Prizes
+    Another Brick in the Wall
+    Bottled-Up Feelings
+    Carousel Rides
+    Climbing Worm
+    Code Cleanups
+    Cow Crane
+    Shattered Cake
+
+}
+
+hard
+{
+    Bitcoin Toss
+    buldozer
+}

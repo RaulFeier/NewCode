@@ -1,0 +1,1 @@
+orice nr prim din intervalul [10, 99]

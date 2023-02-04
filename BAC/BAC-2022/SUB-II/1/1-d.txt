@@ -1,0 +1,19 @@
+citeste n
+i <- 2; k <- 0
+cat timp n >= i executa:
+    daca n % i = 0 atunci:
+        repeta:
+            k <- k + 1
+            n <- [n / i]
+        pana cand n % i != 0
+    sf - daca
+
+    daca i = 2 atunci:
+        i <- i + 1
+        altfel:
+            i <- i + 2
+    sf - daca
+
+sf - cat timp
+
+scrie k

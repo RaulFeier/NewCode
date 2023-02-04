@@ -1,0 +1,45 @@
+██████╗ ██╗   ██╗██╗     ███████╗███████╗
+██╔══██╗██║   ██║██║     ██╔════╝██╔════╝
+██████╔╝██║   ██║██║     █████╗  ███████╗
+██╔══██╗██║   ██║██║     ██╔══╝  ╚════██║
+██║  ██║╚██████╔╝███████╗███████╗███████║
+╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚══════╝╚══════╝
+
+Un artist are:
+    -numarul de stream-uri
+    -numarul de stream-uri facute pe feats
+    -numarul de cantece
+    -numarul de melodii care or trecut de One Billion
+    -numarul de melodii care or trecut de 100 Million
+
+Ce puteti cere cu baza mea de date:
+
+0.Te opresti
+
+1.Scrie-ti numele unui artisit si ce informatii vreti sa aflati despre el:
+a) Tot
+b) Streams
+c) Feats
+d) Tracks
+e) One Billion 
+f) 100 Million
+
+2.Artistul cu cele mai multe Stream-uri
+
+3.Artistul cu cele mai multe Feats-uri
+
+4.Artistul cu cele mai multe Tracks
+
+5.Artistul cu cele mai multe Number of times streams crossed One Billion
+
+6.Artistul cu cele mai multe Number of times streams crossed One Million
+
+7.Artistul cu cele mai putine Stream-uri
+
+8.Artistul/Artistii cu cele mai putine Feats-uri
+
+9.Artistul/Artistii cu cele mai putine Tracks
+
+10.Artistul/Artistii cu cele mai putine Number of times streams crossed One Billion
+
+11.Artistul/Artistii cu cele mai putine Number of times streams crossed One Million
