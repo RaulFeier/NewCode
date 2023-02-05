@@ -228,11 +228,14 @@ int main() {
           }
         }
 
-        i64 newn = n - 1;
         cars.pop_front();
 
-        for (i64 i : range(newn)) {
-          if (total_time >= cars[i].first && initial_bank == cars[i].second) {
+        i64 eep = 0;
+        for (i64 i : range(cars.size())) {
+          if (total_time >= cars[i].first && initial_bank == cars[i].second &&
+              eep <= n) {
+            eep++;
+            cars.pop_front();
           }
         }
       }

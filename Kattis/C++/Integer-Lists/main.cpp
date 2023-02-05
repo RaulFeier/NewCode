@@ -223,16 +223,25 @@ int main() {
     }
 
     bool check = false;
+    bool reverse = false;
     for (auto &x : ans) {
       if (x == 'R') {
-        reverse(sol.begin(), sol.end());
+        if (reverse) {
+          reverse = false;
+        } else {
+          reverse = true;
+        }
       } else {
         if (sol.empty()) {
           cout << "error" << endl;
           check = true;
           break;
         } else {
-          sol.pop_front();
+          if (reverse) {
+            sol.pop_back();
+          } else {
+            sol.pop_front();
+          }
         }
       }
     }
@@ -242,10 +251,21 @@ int main() {
     } else {
       cout << '[';
 
-      for (int i = 0; i < sol.size() - 1; i++) {
-        cout << sol[i] << ',';
+      if (!sol.empty()) {
+        if (reverse) {
+          for (int i = sol.size() - 1; i > 0; i--) {
+            cout << sol[i] << ',';
+          }
+          cout << sol.front() << ']' << endl;
+        } else {
+          for (int i = 0; i < sol.size() - 1; i++) {
+            cout << sol[i] << ',';
+          }
+          cout << sol.back() << ']' << endl;
+        }
+      } else {
+        cout << ']' << endl;
       }
-      cout << sol.back() << ']' << endl;
     }
   }
 
