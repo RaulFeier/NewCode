@@ -1,3 +1,16 @@
+/*    ___                       ___           ___
+     /\__\          ___        /\  \         /\__\
+    /::|  |        /\  \      /::\  \       /:/  /
+   /:|:|  |        \:\  \    /:/\ \  \     /:/  /
+  /:/|:|__|__      /::\__\  _\:\~\ \  \   /:/  /  ___
+ /:/ |::::\__\  __/:/\/__/ /\ \:\ \ \__\ /:/__/  /\__\
+ \/__/~~/:/  / /\/:/  /    \:\ \:\ \/__/ \:\  \ /:/  /
+       /:/  /  \::/__/      \:\ \:\__\    \:\  /:/  /
+      /:/  /    \:\__\       \:\/:/  /     \:\/:/  /
+     /:/  /      \/__/        \::/  /       \::/  /
+     \/__/                     \/__/         \/__/
+*/
+
 #ifndef __AHA__HEADER
 #define __AHA__HEADER
 
@@ -19,10 +32,11 @@ using namespace __gnu_pbds;
 #define pb(x) push_back(x)
 #define ppb(x) pop_back(x)
 #define pp(x) pop_back(x)
-#define bg(x) x.begin(x)
+#define bg(x) x.begin()
 #define ed(x) x.end()
 #define col(x) x.begin(), x.end()
 #define srt(x) sort(x.begin(), x.end())
+#define rvs(x) reverse(x.begin(), x.end())
 
 #define pq priority_queue
 #define fn function
@@ -47,7 +61,6 @@ using byte = int8_t;
 using i3 = int32_t;
 using i6 = int64_t;
 using i64 = int64_t;
-using i128 = __int128_t;
 using u3 = uint32_t;
 using u6 = uint64_t;
 using u64 = uint64_t;
@@ -56,11 +69,11 @@ using d6 = long double;
 using d64 = long double;
 
 using p3 = pair<i3, i3>;
-using p64 = pair<i64, i64>;
 using vi3 = vec<i3>;
 using vp3 = vec<p3>;
 
 using p6 = pair<i6, i6>;
+using p64 = pair<i64, i64>;
 using vi6 = vec<i6>;
 using vi64 = vec<i64>;
 using vd6 = vec<d6>;
@@ -68,6 +81,7 @@ using vd64 = vec<d64>;
 using vp6 = vec<p6>;
 using vp64 = vec<p64>;
 using vv = vec<vi6>;
+using vs = vec<str>;
 
 using dp6 = deq<p6>;
 using di6 = deq<i6>;
@@ -132,27 +146,46 @@ template <typename T> ostream &operator<<(ostream &stream, const vec<T> &v) {
   return stream;
 }
 
-template <typename T> istream &operator>>(istream &stream, deq<T> &v) {
-  if (v.empty()) {
-    u6 len;
-    stream >> len;
-    v.assign(len, T());
-  }
-  for (auto i = 0; i < sz(v); i++) {
-    stream >> v[i];
-  }
-  return stream;
+template <typename T> inline T pop(vector<T> &stack) {
+  T top = stack.back();
+  stack.pop_back();
+  return top;
 }
 
-template <typename T> ostream &operator<<(ostream &stream, const deq<T> &v) {
-  if (!v.empty()) {
-    stream << v[0];
-  }
-  for (auto i = 1; i < sz(v); i++) {
-    stream << " " << v[i];
-  }
-  return stream;
+template <typename T> inline T popb(deq<T> &que) {
+  T top = que.back();
+  que.pop_back();
+  return top;
 }
+
+template <typename T> inline T popf(deq<T> &que) {
+  T top = que.front();
+  que.pop_front();
+  return top;
+}
+
+template <typename T>
+struct number_iterator : std::iterator<random_access_iterator_tag, T> {
+  T v;
+  number_iterator(T _v) : v(_v) {}
+  operator T &() { return v; }
+  T operator*() const { return v; }
+};
+template <typename T> struct number_range {
+  T b, e;
+  number_range(T b, T e) : b(b), e(e) {}
+  number_iterator<T> begin() { return b; }
+  number_iterator<T> end() { return e; }
+};
+
+template <typename T> number_range<T> range(T e) {
+  return number_range<T>(0, e);
+}
+
+template <typename T> number_range<T> range(T b, T e) {
+  return number_range<T>(b, e);
+}
+
 #endif
 
 int main() {
@@ -164,25 +197,52 @@ int main() {
   ofstream cout{"output.txt"};
 #endif
 
-  i64 n, m;
-  cin >> n >> m;
+  i64 tc;
+  cin >> tc;
 
-  vector<i64> v(n + 1);
+  while (tc--) {
+    string ans;
+    cin >> ans;
+    vector<char> sol;
 
-  for (i64 i = 1; i <= n; i++) {
-    cin >> v[i];
-  }
+    for (auto &eep : ans) {
+      if (eep == 't') {
+        if (!sol.empty()) {
+          if (sol.back() == '|') {
+            sol.pop_back();
+            continue;
+          }
+        }
+      } else if (eep == 'b') {
+        if (!sol.empty()) {
+          if (sol.back() == '$') {
+            sol.pop_back();
+            continue;
+          }
+        }
+      } else if (eep == 'j') {
+        if (!sol.empty()) {
+          if (sol.back() == '*') {
+            sol.pop_back();
+            continue;
+          }
+        }
+      }
+      if (eep != '.') {
+        sol.push_back(eep);
+      }
+    }
 
-  for (i64 i = 0; i < m; i++) {
-    i64 t, a, b;
-    cin >> t >> a >> b;
-
-    if (t == 1) {
-      v[a] = b;
+    if (sol.empty()) {
+      cout << "YES" << endl;
     } else {
-      cout << abs(v[a] - v[b]) << endl;
+      cout << "NO" << endl;
     }
   }
 
   return 0;
 }
+
+/*
+
+*/
