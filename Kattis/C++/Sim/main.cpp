@@ -212,6 +212,10 @@ int main() {
     for (auto &x : ans) {
       if (x == '[') {
         eep = true;
+        if (!home.empty()) {
+          end.splice(end.begin(), home);
+          home.clear();
+        }
         continue;
       }
       if (x == ']') {
@@ -233,13 +237,14 @@ int main() {
             end.pop_back();
           }
         } else {
-          if (!home.empty()) {
-            end.splice(end.begin(), home);
-            home.clear();
-          }
           end.push_back(x);
         }
       }
+    }
+
+    if (!home.empty()) {
+      end.splice(end.begin(), home);
+      home.clear();
     }
 
     for (auto &x : end) {
