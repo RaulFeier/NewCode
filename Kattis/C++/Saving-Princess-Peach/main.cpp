@@ -192,79 +192,34 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
   cout.tie(0);
+#ifdef LOCAL
+  ifstream cin{"input.txt"};
+  ofstream cout{"output.txt"};
+#endif
 
-  // ifstream cin{"input.txt"};
-  // ofstream cout{"output.txt"};
+  i64 n, y;
+  cin >> n >> y;
 
-  i64 tc;
-  cin >> tc;
+  vector<bool> eep(n, true);
 
-  bool masa = false;
-  while (tc--) {
-    string ans;
-    if (!masa) {
-      getline(cin, ans);
-      masa = true;
+  i64 count = 0;
+  for (i64 i : range(y)) {
+    i64 nr;
+    cin >> nr;
+
+    if (eep[nr]) {
+      eep[nr] = false;
+      count++;
     }
-    getline(cin, ans);
-
-    list<char> end;
-    list<char> home;
-    bool eep = false;
-
-    for (auto &x : ans) {
-      if (x == '[') {
-        eep = true;
-        if (!home.empty()) {
-          end.splice(end.begin(), home);
-          home.clear();
-        }
-        continue;
-      }
-      if (x == ']') {
-        eep = false;
-        continue;
-      }
-
-      if (eep) {
-        if (x == '<') {
-          if (!home.empty()) {
-            home.pop_back();
-          }
-        } else {
-          home.push_back(x);
-        }
-      } else {
-        if (x == '<') {
-          if (!end.empty()) {
-            end.pop_back();
-          }
-        } else {
-          end.push_back(x);
-        }
-      }
-    }
-
-    if (!home.empty()) {
-      end.splice(end.begin(), home);
-      home.clear();
-    }
-
-    for (auto &x : end) {
-      cout << x;
-    }
-
-    cout << endl;
   }
+
+  for (i64 i : range(n)) {
+    if (eep[i]) {
+      cout << i << endl;
+    }
+  }
+
+  cout << "Mario got " << count << " of the dangerous obstacles." << endl;
 
   return 0;
 }
-
-/*
-1
-<<hate<<<<loves[steva<en ] cs2040c< and also cs2040c
-loves[steva<en ] cs2040c< and also cs2040c
-steven loves cs2040 and also cs2040c
-
-loves[steven ] cs2040 and also cs2040c
-*/

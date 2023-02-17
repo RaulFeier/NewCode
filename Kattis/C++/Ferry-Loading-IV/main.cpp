@@ -1,3 +1,4 @@
+
 /*    ___                       ___           ___
      /\__\          ___        /\  \         /\__\
     /::|  |        /\  \      /::\  \       /:/  /
@@ -192,79 +193,60 @@ int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
   cout.tie(0);
-
-  // ifstream cin{"input.txt"};
-  // ofstream cout{"output.txt"};
+#ifdef LOCAL
+  ifstream cin{"input.txt"};
+  ofstream cout{"output.txt"};
+#endif
 
   i64 tc;
   cin >> tc;
 
-  bool masa = false;
   while (tc--) {
-    string ans;
-    if (!masa) {
-      getline(cin, ans);
-      masa = true;
-    }
-    getline(cin, ans);
+    i64 m, c;
+    cin >> m >> c;
 
-    list<char> end;
-    list<char> home;
-    bool eep = false;
+    deque<i64> l, r;
+    for (i64 i : range(c)) {
+      i64 cent;
+      string bank;
 
-    for (auto &x : ans) {
-      if (x == '[') {
-        eep = true;
-        if (!home.empty()) {
-          end.splice(end.begin(), home);
-          home.clear();
-        }
-        continue;
-      }
-      if (x == ']') {
-        eep = false;
-        continue;
-      }
+      cin >> cent >> bank;
 
-      if (eep) {
-        if (x == '<') {
-          if (!home.empty()) {
-            home.pop_back();
-          }
-        } else {
-          home.push_back(x);
-        }
+      if (bank == "left") {
+        l.push_back(cent);
       } else {
-        if (x == '<') {
-          if (!end.empty()) {
-            end.pop_back();
-          }
-        } else {
-          end.push_back(x);
-        }
+        r.push_back(cent);
       }
     }
 
-    if (!home.empty()) {
-      end.splice(end.begin(), home);
-      home.clear();
+    m *= 100;
+
+    i64 res = 0;
+    bool where = false;
+    while (!l.empty() or !r.empty()) {
+      res++;
+      i64 sum = 0;
+
+      if (where) {
+        while (!r.empty() and sum + r.front() <= m) {
+          sum += r.front();
+          r.pop_front();
+        }
+        where = false;
+      } else {
+        while (!l.empty() and sum + l.front() <= m) {
+          sum += l.front();
+          l.pop_front();
+        }
+        where = true;
+      }
     }
 
-    for (auto &x : end) {
-      cout << x;
-    }
-
-    cout << endl;
+    cout << res << endl;
   }
 
   return 0;
 }
 
 /*
-1
-<<hate<<<<loves[steva<en ] cs2040c< and also cs2040c
-loves[steva<en ] cs2040c< and also cs2040c
-steven loves cs2040 and also cs2040c
-
-loves[steven ] cs2040 and also cs2040c
-*/
+ */
