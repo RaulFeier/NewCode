@@ -267,7 +267,7 @@ int main() {
     }
   }
 
-  // cout << res - count << endl;
+  cout << res - count << endl;
 
   return 0;
 }
