@@ -16,6 +16,7 @@
 
 #include <bits/stdc++.h>
 
+#include <exception>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 
@@ -181,23 +182,24 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-void bfs(graph &eep, vi64 &dist, vi64 &parent) {
-  di64 crt;
-  crt.push_back(1);
-  dist[1] = 0;
+i64 bfs(graph &eep, vector<bool> &visit, i64 current) {
+  di64 q;
+  q.push_back(current);
 
-  while (!crt.empty()) {
-    i64 x = crt.front();
-    crt.pop_front();
+  while (!q.empty()) {
+    i64 crt = q.front();
+    q.pop_front();
+    visit[crt] = true;
 
-    for (i64 i : eep[x]) {
-      if (dist[i] == -1) {
-        dist[i] = dist[x] + 1;
-        parent[i] = x;
-        crt.push_back(i);
+    for (auto x : eep[crt]) {
+      if (!visit[x]) {
+        q.push_back(x);
+        visit[x] = true;
       }
     }
   }
+
+  return 1;
 }
 
 int main() {
@@ -212,42 +214,64 @@ int main() {
   i64 n, m;
   cin >> n >> m;
 
-  graph eep(n + 1);
+  vec<vec<i64>> b(n, vec<i64>(m));
+  i64 count = 0;
 
-  for (i64 i : range(m)) {
-    i64 a, b;
-
-    cin >> a >> b;
-
-    eep[a].push_back(b);
-    eep[b].push_back(a);
+  for (i64 i : range(n)) {
+    for (i64 j : range(m)) {
+      char c;
+      cin >> c;
+      if (c == '.') {
+        b[i][j] = 1;
+      } else {
+        count++;
+        b[i][j] = 0;
+      }
+    }
   }
 
-  vi64 dist(n + 1, -1), parent(n + 1);
+  graph eep(n * m);
 
-  bfs(eep, dist, parent);
-
-  if (dist[n] == -1) {
-    cout << "IMPOSSIBLE" << endl;
-  } else {
-    cout << dist[n] + 1 << endl;
-
-    vi64 res{n};
-
-    while (res.back() != 1) {
-      res.push_back(parent[res.back()]);
+  for (i64 i : range(b.size())) {
+    for (i64 j : range(b[i].size())) {
+      if (b[i][j] == 1) {
+        if (i > 0) {
+          if (b[i - 1][j] == 1) {
+            eep[i * n + j].push_back((i - 1) * n + j);
+          }
+        }
+        if (j > 0) {
+          if (b[i][j - 1] == 1) {
+            eep[i * m + j].push_back(i * m + (j - 1));
+          }
+        }
+        if (j < m - 1) {
+          if (b[i][j + 1] == 1) {
+            eep[i * m + j].push_back(i * m + (j + 1));
+          }
+        }
+        if (i < n - 1) {
+          if (b[i + 1][j] == 1) {
+            eep[i * n + j].push_back((i + 1) * n + j);
+          }
+        }
+      }
     }
-
-    rvs(res);
-    for (i64 i : res) {
-      cout << i << " ";
-    }
-    cout << endl;
   }
+
+  i64 res = 0;
+  vector<bool> visit(n * m, false);
+  for (auto i : range(eep.size())) {
+    if (!visit[i]) {
+      res += bfs(eep, visit, i);
+    }
+  }
+
+  // cout << res - count << endl;
 
   return 0;
 }
 
 /*
-
+run time tc 12
 */

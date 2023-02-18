@@ -7,6 +7,7 @@ typedef short i16;
 typedef int8_t i8;
 typedef vector<i64> vi64;
 typedef vector<vi64> vv;
+#define endl '\n'
 
 void solve1(i32 &n) {
   ifstream cin{"cufar.in"};
