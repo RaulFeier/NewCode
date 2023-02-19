@@ -1,0 +1,43 @@
+{
+    "workbench.colorTheme": "Monokai",
+    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDelete": false,
+    "editor.inlineSuggest.enabled": true,
+    "editor.cursorStyle": "block-outline",
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "git.autofetch": true,
+    "workbench.iconTheme": "vscode-icons",
+    "material-icon-theme.folders.theme": "classic",
+    "material-icon-theme.folders.color": "#da1b26",
+    "github.copilot.enable": {
+        "*": true,
+        "yaml": false,
+        "plaintext": false,
+        "markdown": false,
+        "cpp": true
+    },
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.semanticHighlighting.enabled": true
+    },
+    "[java]": {
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.semanticHighlighting.enabled": true
+    },
+    "editor.cursorSmoothCaretAnimation": "on",
+    "workbench.list.smoothScrolling": true,
+    "editor.smoothScrolling": true,
+    "terminal.integrated.smoothScrolling": true,
+    "editor.guides.bracketPairs": "active",
+    "debug.autoExpandLazyVariables": true,
+    "debug.inlineValues": "on",
+    "C_Cpp.default.enableConfigurationSquiggles": false,
+    "clangd.detectExtensionConflicts": false,
+    "editor.defaultFormatter": "xaver.clang-format",
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "window.zoomLevel": -1,
+}
