@@ -182,7 +182,7 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-i64 bfs(graph &eep, vector<bool> &visit, i64 current) {
+void bfs(graph &eep, vector<bool> &visit, i64 current) {
   di64 q;
   q.push_back(current);
 
@@ -198,8 +198,6 @@ i64 bfs(graph &eep, vector<bool> &visit, i64 current) {
       }
     }
   }
-
-  return 1;
 }
 
 int main() {
@@ -215,7 +213,6 @@ int main() {
   cin >> n >> m;
 
   vec<vec<i64>> b(n, vec<i64>(m));
-  i64 count = 0;
 
   for (i64 i : range(n)) {
     for (i64 j : range(m)) {
@@ -224,7 +221,6 @@ int main() {
       if (c == '.') {
         b[i][j] = 1;
       } else {
-        count++;
         b[i][j] = 0;
       }
     }
@@ -237,7 +233,7 @@ int main() {
       if (b[i][j] == 1) {
         if (i > 0) {
           if (b[i - 1][j] == 1) {
-            eep[i * n + j].push_back((i - 1) * n + j);
+            eep[i * m + j].push_back((i - 1) * m + j);
           }
         }
         if (j > 0) {
@@ -252,9 +248,10 @@ int main() {
         }
         if (i < n - 1) {
           if (b[i + 1][j] == 1) {
-            eep[i * n + j].push_back((i + 1) * n + j);
+            eep[i * m + j].push_back((i + 1) * m + j);
           }
         }
+        eep[i * m + j].push_back(i * m + j);
       }
     }
   }
@@ -262,16 +259,17 @@ int main() {
   i64 res = 0;
   vector<bool> visit(n * m, false);
   for (auto i : range(eep.size())) {
-    if (!visit[i]) {
-      res += bfs(eep, visit, i);
+    if (!visit[i] and !eep[i].empty()) {
+      res++;
+      bfs(eep, visit, i);
     }
   }
 
-  cout << res - count << endl;
+  cout << res << endl;
 
   return 0;
 }
 
 /*
-run time tc 12
+graph bfs solved
 */
