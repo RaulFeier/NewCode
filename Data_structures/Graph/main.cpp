@@ -15,6 +15,16 @@ public:
     graph_size_col = size_col;
   }
 
+  void add(long long parent, long long child) {
+    adjlist[parent].push_back(child);
+  }
+
+  long long size() { return adjlist.size(); }
+
+  void clear() { adjlist.clear(); }
+
+  void pop(long long parent) { adjlist[parent].pop_back(); }
+
   void print() {
     for (int i = 0; i < adjlist.size(); i++) {
       cout << i << ": ";
@@ -29,6 +39,16 @@ public:
 int main() {
   graph g(3, 4);
 
+  g.add(1, 3);
+  g.add(3, 12);
+  g.add(3, 11);
+  g.pop(3);
+
   g.print();
+  cout << g.size() << endl;
+  g.clear();
+  cout << g.size() << endl;
+
+  vector<int> a;
   return 0;
 }

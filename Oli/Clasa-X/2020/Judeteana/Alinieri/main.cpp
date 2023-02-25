@@ -15,5 +15,10 @@ int main() {
     cin >> i;
   }
 
+  vector<int> eep(n, 0);
+
+  for (int i = 0; i < d; i++) {
+  }
+
   return 0;
 }
