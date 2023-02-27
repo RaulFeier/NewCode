@@ -181,104 +181,55 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-vector<vector<char>> rotate(vector<vector<char>> &a, i64 k) {
-  vector<vector<char>> eep(k + 1);
-  for (i64 j = 1; j < k + 1; j++) {
-    for (i64 i = k; i > 0; i--) {
-      if (i == k) {
-        eep[j].pb('a');
-      }
-      eep[j].pb(a[i][j]);
-    }
-  }
-
-  return eep;
-}
-
-bool solve(vector<vector<char>> &Bessie, vector<vector<char>> &stamp, i64 n,
-           i64 k) {
-  vector<vector<bool>> visit(n + 1, vector<bool>(n + 1, false));
-
-  for (i64 i = 1; i < n + 1; i++) {
-    for (i64 j = 1; j < n + 1; j++) {
-      if (Bessie[i][j] == '.') {
-        visit[i][j] = true;
-      }
-    }
-  }
-
-  for (i64 i = 1; i <= n - k + 1; i++) {
-    for (i64 j = 1; j <= n - k + 1; j++) {
-      for (i64 tc : range(4)) {
-        for (i64 a = 1; a < k + 1; a++) {
-          for (i64 b = 1; b < k + 1; b++) {
-            if (stamp[a][b] == Bessie[i + a - 1][j + b - 1] and
-                !visit[i + a - 1][j + b - 1]) {
-              visit[i + a - 1][j + b - 1] = true;
-            }
-          }
-        }
-        stamp = rotate(stamp, k);
-      }
-    }
-  }
-
-  for (i64 i = 1; i < n + 1; i++) {
-    for (i64 j = 1; j < n + 1; j++) {
-      if (!visit[i][j]) {
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
-
 int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
   cout.tie(0);
+#ifdef LOCAL
+  ifstream cin{"input.txt"};
+  ofstream cout{"output.txt"};
+#endif
 
-  // ifstream cin{"input.txt"};
-  // ofstream cout{"output.txt"};
+  i64 n;
+  cin >> n;
 
-  i64 tc;
-  cin >> tc;
+  deque<i64> q(n * 2);
 
-  while (tc--) {
-    string eep;
-    cin >> eep;
+  for (i64 i = 0; i < n * 2; i++) {
+    cin >> q[i];
+  }
 
-    i64 n;
-    cin >> n;
-    vector<vector<char>> Bessie(n + 1, vector<char>(n + 1));
+  deque<i64> q2;
 
-    for (i64 i = 1; i < n + 1; i++) {
-      for (i64 j = 1; j < n + 1; j++) {
-        cin >> Bessie[i][j];
-      }
+  i64 cnt = 0;
+  while (!q.empty()) {
+    cnt++;
+
+    if (q2.empty()) {
+      q2.push_front(q.front());
+      q.pop_front();
+      continue;
     }
 
-    i64 k;
-    cin >> k;
-
-    vector<vector<char>> stamp(k + 1, vector<char>(k + 1));
-
-    for (i64 i = 1; i < k + 1; i++) {
-      for (i64 j = 1; j < k + 1; j++) {
-        cin >> stamp[i][j];
-      }
+    if (q.front() == q2.front()) {
+      q.pop_front();
+      q2.pop_front();
+      continue;
     }
 
-    if (solve(Bessie, stamp, n, k)) {
-      cout << "YES" << endl;
-    } else {
-      cout << "NO" << endl;
-    }
+    q2.push_front(q.front());
+    q.pop_front();
+  }
+
+  if (q2.empty()) {
+    cout << cnt << endl;
+  } else {
+    cout << "impossible" << endl;
   }
 
   return 0;
 }
 
 /*
- */
+eep
+*/
