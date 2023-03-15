@@ -181,45 +181,6 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-void solve(vector<bool> &eep) {
-  bool check = false;
-
-  for (i64 x = 1; x < eep.size(); x++) {
-    if (!eep[x]) {
-      check = true;
-      cout << x << endl;
-    }
-  }
-
-  if (!check) {
-    cout << "Connected" << endl;
-  }
-}
-
-void bfs(graph &g) {
-  vector<bool> visit(g.size(), false);
-
-  deque<i64> q;
-
-  q.push_back(1);
-
-  while (!q.empty()) {
-    i64 crt = q.front();
-
-    q.pop_front();
-    visit[crt] = true;
-
-    for (auto x : g[crt]) {
-      if (!visit[x]) {
-        q.push_back(x);
-        visit[x] = true;
-      }
-    }
-  }
-
-  solve(visit);
-}
-
 int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
@@ -232,17 +193,21 @@ int main() {
   i64 n, m;
   cin >> n >> m;
 
-  graph g(n + 1);
+  vector<vector<char>> grid(n, vector<char>(m));
 
-  for (i64 tc : range(m)) {
-    i64 a, b;
-    cin >> a >> b;
-
-    g[a].push_back(b);
-    g[b].push_back(a);
+  for (i64 i : range(n)) {
+    for (i64 j : range(m)) {
+      cin >> grid[i][j];
+    }
   }
 
-  bfs(g);
+  graph g(n * m);
+
+  for (i64 i : range(n)) {
+    for (i64 j : range(m)) {
+      // if ()
+    }
+  }
 
   return 0;
 }

@@ -16,5 +16,7 @@ class MixedFractions {
 
       System.out.println(a / b + " " + a % b + " / " + b);
     }
+
+    scan.close();
   }
 }

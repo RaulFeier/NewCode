@@ -181,45 +181,6 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-void solve(vector<bool> &eep) {
-  bool check = false;
-
-  for (i64 x = 1; x < eep.size(); x++) {
-    if (!eep[x]) {
-      check = true;
-      cout << x << endl;
-    }
-  }
-
-  if (!check) {
-    cout << "Connected" << endl;
-  }
-}
-
-void bfs(graph &g) {
-  vector<bool> visit(g.size(), false);
-
-  deque<i64> q;
-
-  q.push_back(1);
-
-  while (!q.empty()) {
-    i64 crt = q.front();
-
-    q.pop_front();
-    visit[crt] = true;
-
-    for (auto x : g[crt]) {
-      if (!visit[x]) {
-        q.push_back(x);
-        visit[x] = true;
-      }
-    }
-  }
-
-  solve(visit);
-}
-
 int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
@@ -229,20 +190,36 @@ int main() {
   ofstream cout{"output.txt"};
 #endif
 
-  i64 n, m;
-  cin >> n >> m;
+  i64 tc;
+  cin >> tc;
 
-  graph g(n + 1);
+  while (tc--) {
+    i64 n, x, f;
 
-  for (i64 tc : range(m)) {
-    i64 a, b;
-    cin >> a >> b;
+    cin >> n >> x >> f;
 
-    g[a].push_back(b);
-    g[b].push_back(a);
+    vi64 res_f(f);
+
+    for (i64 i : range(f)) {
+      res_f[i] = (i + 1) * (1 + (1 + i)) / 2;
+    }
+
+    i64 res = n - x;
+
+    while (true) {
+      if (res > res_f.back()) {
+        cout << "No" << endl;
+        break;
+      }
+
+      if (binary_search(res_f.begin(), res_f.end(), res)) {
+        cout << "Yes" << endl;
+        break;
+      } else {
+        res += n;
+      }
+    }
   }
-
-  bfs(g);
 
   return 0;
 }
