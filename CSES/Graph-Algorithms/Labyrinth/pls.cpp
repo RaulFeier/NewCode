@@ -181,6 +181,80 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
+i64 lin, col;
+
+void solve(p64 end, vec<vec<bool>> &visit, vec<vec<i64>> &dist,
+           vec<vec<char>> &dir) {
+  if (!visit[end.first][end.second]) {
+    cout << "NO" << endl;
+    return;
+  }
+
+  cout << "YES" << endl;
+  cout << dist[end.first][end.second] << endl;
+
+  p64 p = end;
+  deque<char> ans;
+  for (i64 i = dist[end.first][end.second]; i > 0; i--) {
+    ans.push_front(dir[p.first][p.second]);
+    if (ans.front() == 'D') {
+      p = {p.first - 1, p.second};
+    } else if (ans.front() == 'L') {
+      p = {p.first, p.second + 1};
+    } else if (ans.front() == 'R') {
+      p = {p.first, p.second - 1};
+    } else if (ans.front() == 'U') {
+      p = {p.first + 1, p.second};
+    }
+  }
+
+  for (auto i : ans) {
+    cout << i;
+  }
+
+  cout << endl;
+}
+
+const vector<i64> dirx = {1, -1, 0, 0};
+const vector<i64> diry = {0, 0, 1, -1};
+
+void bfs(vector<vector<char>> &labyrinth, vector<vector<bool>> &visit,
+         p64 start, p64 end) {
+  deque<p64> q;
+  q.push_back(start);
+
+  visit[start.first][start.second] = true;
+  vector<vector<char>> directions(lin, vector<char>(col));
+  vector<vector<i64>> dist(lin, vector<i64>(col, 0));
+
+  while (!q.empty()) {
+    auto p = q.front();
+
+    q.pop_front();
+    for (i64 t : range(4)) {
+      i64 xx = p.first + dirx[t];
+      i64 yy = p.second + diry[t];
+
+      if (xx >= 0 and yy >= 0 and xx < lin and yy < col and !visit[xx][yy]) {
+        if (t == 0) {
+          directions[xx][yy] = 'D'; // }
+        } else if (t == 1) {        // |
+          directions[xx][yy] = 'U'; // |
+        } else if (t == 2) {        // |   directions
+          directions[xx][yy] = 'R'; // |
+        } else if (t == 3) {        // |
+          directions[xx][yy] = 'L'; // }
+        }
+        dist[xx][yy] = dist[p.first][p.second] + 1; // calculate the distance
+        visit[xx][yy] = true;
+        q.push_back({xx, yy});
+      }
+    }
+  }
+
+  solve(end, visit, dist, directions);
+}
+
 int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
@@ -189,6 +263,32 @@ int main() {
   ifstream cin{"input.txt"};
   ofstream cout{"output.txt"};
 #endif
+
+  cin >> lin >> col;
+
+  vector<vector<char>> labyrinth(lin, vector<char>(col));
+  vector<vector<bool>> visit(lin, vector<bool>(col, false));
+
+  p64 start;
+  p64 end;
+
+  for (i64 i : range(lin)) {
+    for (i64 j : range(col)) {
+      cin >> labyrinth[i][j];
+
+      if (labyrinth[i][j] == 'A') {
+        start.first = i;
+        start.second = j;
+      } else if (labyrinth[i][j] == 'B') {
+        end.first = i;
+        end.second = j;
+      } else if (labyrinth[i][j] == '#') {
+        visit[i][j] = true;
+      }
+    }
+  }
+
+  bfs(labyrinth, visit, start, end);
 
   return 0;
 }

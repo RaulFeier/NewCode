@@ -215,6 +215,28 @@ public:
 
 #endif
 
+i64 bfs(vector<vector<i64>> &g, vector<bool> &visit, i64 start) {
+  deque<i64> q;
+
+  q.push_front(start);
+  visit[start] = true;
+
+  i64 p;
+  while (!q.empty()) {
+    p = q.front();
+    q.pop_front();
+
+    for (auto x : g[p]) {
+      if (!visit[x]) {
+        visit[x] = true;
+        q.push_back(x);
+      }
+    }
+  }
+
+  return p;
+}
+
 int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
@@ -227,14 +249,34 @@ int main() {
   i64 n, m;
   cin >> n >> m;
 
-  Graph g(n, m);
+  vector<vector<i64>> graph(n + 1);
 
   for (i64 i : range(m)) {
     i64 a, b;
     cin >> a >> b;
 
-    g.add(a, b);
-    g.add(b, a);
+    graph[a].push_back(b);
+    graph[b].push_back(a);
+  }
+
+  vector<bool> visit(n + 1, false);
+  vector<i64> sol;
+  vector<i64> start;
+
+  for (i64 i = 1; i <= n; i++) {
+    if (!visit[i]) {
+      start.push_back(i);
+      sol.push_back(bfs(graph, visit, i));
+    }
+  }
+
+  if (!(sol.size() == 1)) {
+    cout << sol.size() - 1 << endl;
+    for (i64 i = 0; i < sol.size() - 1; i++) {
+      cout << sol[i] << " " << start[i + 1] << endl;
+    }
+  } else {
+    cout << 0 << endl;
   }
 
   return 0;
