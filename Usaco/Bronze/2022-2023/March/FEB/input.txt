@@ -1,0 +1,11 @@
+this is what i should get 
+SAMPLE INPUT:
+4
+BEEF
+SAMPLE OUTPUT:
+2
+1
+2
+and my output is 
+1
+1

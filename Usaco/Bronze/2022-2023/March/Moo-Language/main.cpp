@@ -1,3 +1,16 @@
+/*    ___                       ___           ___
+     /\__\          ___        /\  \         /\__\
+    /::|  |        /\  \      /::\  \       /:/  /
+   /:|:|  |        \:\  \    /:/\ \  \     /:/  /
+  /:/|:|__|__      /::\__\  _\:\~\ \  \   /:/  /  ___
+ /:/ |::::\__\  __/:/\/__/ /\ \:\ \ \__\ /:/__/  /\__\
+ \/__/~~/:/  / /\/:/  /    \:\ \:\ \/__/ \:\  \ /:/  /
+       /:/  /  \::/__/      \:\ \:\__\    \:\  /:/  /
+      /:/  /    \:\__\       \:\/:/  /     \:\/:/  /
+     /:/  /      \/__/        \::/  /       \::/  /
+     \/__/                     \/__/         \/__/
+*/
+
 #ifndef __AHA__HEADER
 #define __AHA__HEADER
 
@@ -14,7 +27,7 @@ using namespace __gnu_pbds;
 #define g2 get<2>
 #define ft first
 #define sd second
-#define sz(x) (i6) x.size()
+#define sz(x) (i64) x.size()
 #define psb(x) push_back(x)
 #define pb(x) push_back(x)
 #define ppb(x) pop_back(x)
@@ -45,51 +58,44 @@ using str = string;
 using vb = vec<bool>;
 
 using byte = int8_t;
-using i3 = int32_t;
-using i6 = int64_t;
+using i32 = int32_t;
 using i64 = int64_t;
-using i128 = __int128_t;
-using u3 = uint32_t;
-using u6 = uint64_t;
+using u32 = uint32_t;
 using u64 = uint64_t;
 
-using d6 = long double;
 using d64 = long double;
 
-using p3 = pair<i3, i3>;
-using vi3 = vec<i3>;
-using vp3 = vec<p3>;
+using p32 = pair<i32, i32>;
+using vi32 = vec<i32>;
+using vp32 = vec<p32>;
 
-using p6 = pair<i6, i6>;
 using p64 = pair<i64, i64>;
-using vi6 = vec<i6>;
 using vi64 = vec<i64>;
-using vd6 = vec<d6>;
 using vd64 = vec<d64>;
-using vp6 = vec<p6>;
 using vp64 = vec<p64>;
-using vv = vec<vi6>;
+using vv = vec<vi64>;
+using vs = vec<str>;
 
-using dp6 = deq<p6>;
-using di6 = deq<i6>;
+using dp64 = deq<p64>;
+using di64 = deq<i64>;
 
-using mi6 = map<i6, i6>;
-using mp6 = map<p6, i6>;
-using si6 = set<i6>;
-using hi6 = hmap<i6, i6>;
+using mi64 = map<i64, i64>;
+using mp64 = map<p64, i64>;
+using si64 = set<i64>;
+using hi64 = hmap<i64, i64>;
 
 using bs = bitset<64>;
 
 using graph = vv;
 using matrix = vv;
 
-const d6 EPS = 1 / 1000000.0;
-const i6 INF = INT64_MAX / 4;
-const i6 NINF = -INF;
-const i6 ZERO = 0;
-const i6 _0 = ZERO;
-const i6 ONE = 1;
-const i6 _1 = ONE;
+const d64 EPS = 1 / 1000000.0;
+const i64 INF = INT64_MAX / 4;
+const i64 NINF = -INF;
+const i64 ZERO = 0;
+const i64 _0 = ZERO;
+const i64 ONE = 1;
+const i64 _1 = ONE;
 
 namespace std {
 template <typename T1, typename T2> struct hash<pair<T1, T2>> {
@@ -113,7 +119,7 @@ ostream &operator<<(ostream &stream, const pair<T1, T2> &p) {
 
 template <typename T> istream &operator>>(istream &stream, vec<T> &v) {
   if (v.empty()) {
-    u6 len;
+    u64 len;
     stream >> len;
     v.assign(len, T());
   }
@@ -124,28 +130,6 @@ template <typename T> istream &operator>>(istream &stream, vec<T> &v) {
 }
 
 template <typename T> ostream &operator<<(ostream &stream, const vec<T> &v) {
-  if (!v.empty()) {
-    stream << v[0];
-  }
-  for (auto i = 1; i < sz(v); i++) {
-    stream << " " << v[i];
-  }
-  return stream;
-}
-
-template <typename T> istream &operator>>(istream &stream, deq<T> &v) {
-  if (v.empty()) {
-    u6 len;
-    stream >> len;
-    v.assign(len, T());
-  }
-  for (auto i = 0; i < sz(v); i++) {
-    stream >> v[i];
-  }
-  return stream;
-}
-
-template <typename T> ostream &operator<<(ostream &stream, const deq<T> &v) {
   if (!v.empty()) {
     stream << v[0];
   }
@@ -194,23 +178,8 @@ template <typename T> number_range<T> range(T e) {
 template <typename T> number_range<T> range(T b, T e) {
   return number_range<T>(b, e);
 }
+
 #endif
-
-void solve(vector<i64> &v, string &s, int i) {
-  if (i == s.size()) {
-    return;
-  }
-
-  if (s[i] == 'A') {
-    swap(v[0], v[1]);
-  } else if (s[i] == 'B') {
-    swap(v[1], v[2]);
-  } else if (s[i] == 'C') {
-    swap(v[0], v[2]);
-  }
-
-  solve(v, s, ++i);
-}
 
 int main() {
   ios_base::sync_with_stdio(false);
@@ -221,24 +190,16 @@ int main() {
   ofstream cout{"output.txt"};
 #endif
 
-  string ans;
-  cin >> ans;
-  vector<i64> v(3);
-  v.assign({1, 0, 0});
+  i64 tc;
+  cin >> tc;
 
-  solve(v, ans, 0);
-
-  if (v[0]) {
-    cout << "1" << endl;
-  } else if (v[1]) {
-    cout << "2" << endl;
-  } else {
-    cout << "3" << endl;
+  while (tc--) {
+    i64 n, c, p;
+    cin >> n >> c >> p;
   }
 
   return 0;
 }
 
 /*
-Trik
-*/
+ */
