@@ -23,4 +23,7 @@
     "editor.smoothScrolling": true,
     "clang-format.executable": "/usr/bin/clang-format",
     "java.debug.settings.onBuildFailureProceed": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
 }
