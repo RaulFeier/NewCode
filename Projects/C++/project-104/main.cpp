@@ -1,9 +1,11 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using i64 = long long;
 
 int main() {
-  cout << "Hello, world!" << endl;
+  string ans;
+  cin >> ans;
+
+  int t = 0;
   return 0;
 }

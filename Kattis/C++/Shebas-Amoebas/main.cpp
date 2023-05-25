@@ -181,60 +181,28 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-const vi64 dirx = {0, 0, -1, 1};
-const vi64 diry = {-1, 1, 0, 0};
+const vector<i64> dirx = {-1, 1, 0, 0, -1, -1, 1, 1};
+const vector<i64> diry = {0, 0, 1, -1, 1, -1, 1, -1};
 
-i64 count(vv &grid, pair<i64, i64> &cur) {
-  i64 crt = 0;
-
-  for (i64 i = 0; i < 4; i++) {
-    i64 xx = cur.first + dirx[i];
-    i64 yy = cur.second + diry[i];
-
-    if (xx >= 0 and xx < grid.size() and yy >= 0 and
-        yy < grid.front().size() and grid[xx][yy]) {
-      crt++;
-    }
-  }
-
-  return crt;
-}
-
-i64 bfs(vv &grid, pair<i64, i64> &start, vector<vector<bool>> &visit) {
-  i64 crt = 0;
-  bool ok = true;
-
-  deque<pair<i64, i64>> q;
+void bfs(vector<vector<char>> &eep, vector<vector<bool>> &visit, p64 start) {
+  deque<p64> q;
   q.push_back(start);
+  visit[start.first][start.second] = true;
 
   while (!q.empty()) {
-    pair<i64, i64> cur = q.front();
+    auto crt = q.front();
     q.pop_front();
-    visit[cur.first][cur.second] = true;
 
-    for (i64 i = 0; i < 4; i++) {
-      i64 xx = cur.first + dirx[i];
-      i64 yy = cur.second + diry[i];
-
-      if (xx >= 0 and xx < grid.size() and yy >= 0 and
-          yy < grid.front().size() and !grid[xx][yy] and !visit[xx][yy]) {
+    for (i64 i : range(8)) {
+      auto xx = crt.first + dirx[i];
+      auto yy = crt.second + diry[i];
+      if (xx >= 0 and xx < eep.size() and yy >= 0 and
+          yy < eep.front().size() and eep[xx][yy] == '#' and !visit[xx][yy]) {
         q.push_back({xx, yy});
         visit[xx][yy] = true;
-      } else if (xx >= 0 and xx < grid.size() and yy >= 0 and
-                 yy < grid.front().size() and grid[xx][yy]) {
-        crt++;
-      } else if (xx < 0 or xx >= grid.size() or yy < 0 or
-                 yy >= grid.front().size()) {
-        ok = false;
       }
     }
   }
-
-  if (ok) {
-    return crt;
-  }
-
-  return 0;
 }
 
 int main() {
@@ -246,37 +214,31 @@ int main() {
   ofstream cout{"output.txt"};
 #endif
 
-  i64 l, c;
-  cin >> l >> c;
+  i64 n, m;
+  cin >> n >> m;
+  vector<vector<char>> eep(n, vector<char>(m));
 
-  vv grid(l, vi64(c));
-  for (i64 i = 0; i < l; i++) {
-    str ss;
-    cin >> ss;
-
-    for (i64 j = 0; j < c; j++) {
-      grid[i][j] = ss[j] - '0';
+  for (i64 i : range(n)) {
+    for (i64 j : range(m)) {
+      cin >> eep[i][j];
     }
   }
 
-  i64 res = 0;
-  vector<vector<bool>> visit(l, vector<bool>(c, false));
-  for (i64 i = 0; i < l; i++) {
-    for (i64 j = 0; j < c; j++) {
-      if (grid[i][j]) {
-        pair<i64, i64> start = {i, j};
-        res += 4 - count(grid, start);
-      } else {
-        if (!visit[i][j]) {
-          pair<i64, i64> start = {i, j};
-          res -= bfs(grid, start, visit);
-        }
+  vector<vector<bool>> visit(n, vector<bool>(m, false));
+  i64 crt = 0;
+  for (i64 i : range(n)) {
+    for (i64 j : range(m)) {
+      if (eep[i][j] == '#' and !visit[i][j]) {
+        bfs(eep, visit, {i, j});
+        crt++;
       }
     }
   }
 
-  cout << res << endl;
+  cout << crt << endl;
+  return 0;
 }
 
 /*
- */
+
+*/
