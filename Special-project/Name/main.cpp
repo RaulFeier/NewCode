@@ -28,7 +28,7 @@ int main() {
   cout << "               `-'     `-'   " << endl;
 
   double x, y, size = 10;
-  string message(" Imi pare rau ");
+  string message(" Te iubesc ");
   int print_line = 4;
   if (message.length() % 2 != 0)
     message += " ";
