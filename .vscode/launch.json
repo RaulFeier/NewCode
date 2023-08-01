@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "BasicRemains",
+            "request": "launch",
+            "mainClass": "Kattis.Java.BasicRemains.BasicRemains",
+            "projectName": "NewCode_8f3dfa5d"
+        },
+        {
+            "type": "java",
             "name": "Java",
             "request": "launch",
             "mainClass": "${file}",
