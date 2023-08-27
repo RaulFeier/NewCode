@@ -181,126 +181,47 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-i64 power_of_two(i64 n) {
-  i64 cnt = 1;
-  while (cnt < n) {
-    cnt *= 2;
-  }
-
-  return cnt;
-}
-
-class SegmentTree {
-private:
-  int n;
-  int len;
-  vector<i64> tree;
-
-public:
-  SegmentTree(vector<i64> &tree) {
-    n = tree.size();
-    len = power_of_two(n);
-    this->tree.resize(len * 2);
-    build(tree);
-  }
-
-  void build(vector<i64> &tree) {
-    for (int i = 0; i < n; i++) {
-      this->tree[i + len] = tree[i];
-    }
-
-    int start = len / 2;
-    int end = len;
-    while (start != 0) {
-      for (int index = start; index < end; index++) {
-        this->tree[index] = this->tree[index * 2] + this->tree[index * 2 + 1];
-      }
-      start /= 2;
-      end /= 2;
-    }
-  }
-
-  void update(int pos, int value) {
-    pos = pos + len - 1;
-    this->tree[pos] = value;
-
-    pos = pos / 2;
-    while (pos > 0) {
-      this->tree[pos] = this->tree[pos * 2] + this->tree[pos * 2 + 1];
-      pos /= 2;
-    }
-  }
-
-  i64 query(i64 l, i64 r) {
-    l = l + len - 1;
-    r = r + len - 1;
-    i64 res = 0;
-
-    while (l <= r) {
-      if (l % 2 == 1) {
-        res += this->tree[l];
-        l++;
-      }
-      if (r % 2 == 0) {
-        res += this->tree[r];
-        r--;
-      }
-
-      r /= 2;
-      l /= 2;
-    }
-
-    return res;
-  }
-};
+vector<int> v;
 
 int main() {
-  ios_base::sync_with_stdio(false);
-  cin.tie(0);
-  cout.tie(0);
-#ifdef LOCAL
-  ifstream cin{"input.txt"};
-  ofstream cout{"output.txt"};
-#endif
+  i64 tc;
+  cin >> tc;
+  while (tc--) {
+    i64 n;
+    cin >> n;
+    v.assign(n, 0);
+    for (auto &e : v) {
+      cin >> e;
+    }
+    v.push_back(0);
 
-  i64 n, q;
-  cin >> n >> q;
+    i64 crt = 0;
+    bool not_good = false;
 
-  vector<i64> v(6);
-  for (i64 i : range(6)) {
-    cin >> v[i];
-  }
+    for (int height = n; height > 0; height--) {
+      for (int i = 0; i < v[height - 1] - v[height]; i++) {
+        if (v[crt] != height) {
+          not_good = true;
+          break;
+        }
+        if (crt == n - 1) {
+          break;
+          not_good = true;
+        }
+      }
+      if (not_good) {
+        break;
+      }
+    }
 
-  vector<i64> array(n);
-  for (i64 i : range(n)) {
-    char c;
-    cin >> c;
-    array[i] = v[c - '0' - 1];
-  }
-
-  SegmentTree tree(array);
-
-  while (q--) {
-    i64 type;
-    cin >> type;
-
-    if (type == 1) {
-      i64 k, p;
-      cin >> k >> p;
-      p--;
-      tree.update(k, v[p]);
-    } else if (type == 2) {
-      i64 p, value;
-      cin >> p >> value;
-      p--;
-      v[p] = value;
+    if (not_good) {
+      cout << "NO" << endl;
+    } else if (v[crt] != 0) {
+      cout << "NO" << endl;
     } else {
-      i64 l, r;
-      cin >> l >> r;
-      cout << tree.query(l, r) << endl;
+      cout << "YES" << endl;
     }
   }
-
   return 0;
 }
 
