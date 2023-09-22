@@ -1,0 +1,70 @@
+Given an array a of n positive integers. You need to perform the following operation exactly once:
+
+Choose 2 integers l and r (1 <= l <= r <= n) and replace the subarray a[l…r] with the single element: the product of all elements in the subarray (a[l] * … *a[r]).
+
+For example, if an operation with parameters l=2,r=4 is applied to the array [5,4,3,2,1], the array will turn into [5,24,1].
+
+Your task is to maximize the sum of the array after applying this operation. Find the optimal subarray to apply this operation.
+
+Input
+
+Each test consists of multiple test cases. The first line contains a single integer t
+(1 <= t <= 10^4) — the number of test cases. This is followed by the description of the test cases.
+
+The first line of each test case contains a single number n(1 <= n <= 2*10^5) — the length of the array a.
+
+The second line of each test case contains n
+integers a[1],a[2],…,a[n] (1 <= a[i] <= 10^9).
+
+It is guaranteed that the sum of the values of n for all test cases does not exceed 2*10^5.
+Output
+
+For each test case, output 2
+integers l and r (1 <= l <= r <= n) — the boundaries of the subarray to be replaced with the product.
+
+If there are multiple solutions, output any of them.
+
+Example
+Input
+Copy
+
+9
+4
+1 3 1 3
+4
+1 1 2 3
+5
+1 1 1 1 1
+5
+10 1 10 1 10
+1
+1
+2
+2 2
+3
+2 1 2
+4
+2 1 1 3
+6
+2 1 2 1 1 3
+
+Output
+Copy
+
+2 4
+3 4
+1 1
+1 5
+1 1
+1 2
+2 2
+4 4
+1 6
+
+Note
+
+In the first test case, after applying the operation with parameters l =2 ,r = 4, the array [1,3,1,3] turns into [1,9], with a sum equal to 10. It is easy to see that by replacing any other segment with a product, the sum will be less than 10.
+
+In the second test case, after applying the operation with parameters l = 3,r = 4, the array [1,1,2,3] turns into [1,1,6], with a sum equal to 8. It is easy to see that by replacing any other segment with a product, the sum will be less than 8.
+
+In the third test case, it will be optimal to choose any operation with l=r, then the sum of the array will remain 5, and when applying any other operation, the sum of the array will decrease.

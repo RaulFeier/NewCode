@@ -1,0 +1,15 @@
+this is the input
+5 12
+3 2 4 1 8
+4 4 2 4 1
+
+this is the output
+3
+
+we can select the interval l = 0 and r = 2 beacause 4 % 4 == 0 and 4 % 2 == 0 and we have 3 numbers in this case and if we add the apples we get 3 + 2 + 4 <= 12
+
+7 10
+2 6 3 1 5 10 6
+72 24 24 12 4 4 2
+
+you get 2 and it should be 3

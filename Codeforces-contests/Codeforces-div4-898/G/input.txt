@@ -1,0 +1,38 @@
+You are given a string s made up of characters A and B. Initially you have no coins. You can perform two types of operations:
+
+Pick a substring AB, change it to BC, and get a coin.
+Pick a substring BA, change it to CB, and get a coin. 
+
+What is the most number of coins you can obtain?
+
+A substring of length 2 is a sequence of two adjacent characters of a string.
+
+input
+
+8
+ABBA
+ABA
+BAABA
+ABB
+AAAAAAB
+BABA
+B
+AAA
+
+output
+
+2
+1
+3
+1
+6
+2
+0
+0
+
+in the first test case you can perform the following operations to get 2 coins:
+
+ABBA -> BCBA -> BCCB
+
+in your code for the input AAAAAAB you get 1
+but it can be 6 beacause AAAAAAB -> AAAAABC -> AAAABCC -> AAABCCC -> AABCCCC -> ABCCCCC -> BCCCCCC
