@@ -1,69 +1,67 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-using i64 = long long;
-using d6 = long double;
 
-vector<string> h;
-vector<bool> used;
-i64 rest = 1e9;
+#define endl '\n'
+typedef long long i64;
+typedef int i32;
+typedef short i16;
+typedef vector<i64> vi64;
+typedef vector<vi64> vv;
+typedef string str;
+typedef pair<i64, i64> p64;
 
-void solved(i64 pos, i64 n, i64 cos, vector<i64> &sol)
-{
-    if (pos == n)
-    {
-        rest = cos;
-        return;
+i64 ver(str &s1, str &s2) {
+  i64 crt = 0;
+
+  for (i64 i = 0; i < s1.size(); i++) {
+    for (i64 j = 0; j < s2.size(); j++) {
+      if (s1[i] == s2[j]) {
+        crt++;
+      }
     }
+  }
 
-    for (int i = 0; i < n; i++)
-    {
-        if (!used[i])
-        {
-            used[i] = true;
-            sol.push_back(i);
-            int ch = 0;
-            if (pos > 0)
-            {
-                for (auto c1 : h[sol[pos]])
-                {
-                    for (auto c2 : h[sol[pos - 1]])
-                    {
-                        if (c1 == c2)
-                        {
-                            ch++;
-                        }
-                    }
-                }
-            }
-            if (cos + ch < rest)
-            {
-                solved(pos + 1, n, cos + ch, sol);
-            }
-            
-            sol.pop_back();
-            used[i] = false;
-        }
-    }
+  return crt;
 }
 
-int main()
-{
-    i64 n;
-    cin >> n;
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(NULL);
+  cout.tie(NULL);
 
-    for (i64 i = 0; i < n; i++)
-    {
-        string ans;
+  i64 n, res = 1e9;
+  cin >> n;
 
-        cin >> ans;
+  vi64 v(n);
+  vector<str> s(n);
+  for (i64 i = 0; i < n; i++) {
+    cin >> s[i];
+    v[i] = i;
+  }
 
-        h.push_back(ans);
-        used.push_back(false);
+  map<pair<i64, i64>, i64> m;
+
+  do {
+    i64 crt = 0;
+    for (i64 i = 0; i < n - 1; i++) {
+      pair<i64, i64> p = {v[i], v[i + 1]};
+
+      if (!m.count(p)) {
+        m[p] = ver(s[v[i]], s[v[i + 1]]);
+      }
+
+      crt += m[p];
     }
 
-    vector<i64> sol;
+    res = min(res, crt);
 
-    solved(0, n, 0, sol);
-    cout << rest << endl;
+    if (res == 0) {
+      break;
+    }
+  } while (next_permutation(v.begin(), v.end()));
+
+  cout << res << endl;
+
+  return 0;
 }
