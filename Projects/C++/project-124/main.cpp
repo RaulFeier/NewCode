@@ -4,5 +4,15 @@ using namespace std;
 using i64 = long long;
 
 int main() {
-	return 0;
+  i64 n;
+  cin >> n;
+
+  return 0;
 }
+
+/*
+1 6
+2 3
+3 6
+4 8
+*/

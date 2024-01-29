@@ -8,6 +8,11 @@ i64 bpow(i64 n, i64 m) {
   if (m == 0) {
     return 1;
   }
+
+  if (m == 1) {
+    return n;
+  }
+
   if (m % 2 == 0) {
     i64 res = bpow(n, m / 2);
     return (res * res) % mod;

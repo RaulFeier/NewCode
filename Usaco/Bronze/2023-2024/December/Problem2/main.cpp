@@ -27,7 +27,7 @@ using namespace __gnu_pbds;
 #define g2 get<2>
 #define ft first
 #define sd second
-#define sz(x) (i6) x.size()
+#define sz(x) (i64) x.size()
 #define psb(x) push_back(x)
 #define pb(x) push_back(x)
 #define ppb(x) pop_back(x)
@@ -58,51 +58,44 @@ using str = string;
 using vb = vec<bool>;
 
 using byte = int8_t;
-using i3 = int32_t;
-using i6 = int64_t;
+using i32 = int32_t;
 using i64 = int64_t;
-using u3 = uint32_t;
-using u6 = uint64_t;
+using u32 = uint32_t;
 using u64 = uint64_t;
 
-using d6 = long double;
 using d64 = long double;
 
-using p3 = pair<i3, i3>;
-using vi3 = vec<i3>;
-using vp3 = vec<p3>;
+using p32 = pair<i32, i32>;
+using vi32 = vec<i32>;
+using vp32 = vec<p32>;
 
-using p6 = pair<i6, i6>;
 using p64 = pair<i64, i64>;
-using vi6 = vec<i6>;
 using vi64 = vec<i64>;
-using vd6 = vec<d6>;
 using vd64 = vec<d64>;
-using vp6 = vec<p6>;
 using vp64 = vec<p64>;
-using vv = vec<vi6>;
+using vv = vec<vi64>;
 using vs = vec<str>;
 
-using dp6 = deq<p6>;
-using di6 = deq<i6>;
+using dp64 = deq<p64>;
+using di64 = deq<i64>;
 
-using mi6 = map<i6, i6>;
-using mp6 = map<p6, i6>;
-using si6 = set<i6>;
-using hi6 = hmap<i6, i6>;
+using mi64 = map<i64, i64>;
+using mp64 = map<p64, i64>;
+using si64 = set<i64>;
+using hi64 = hmap<i64, i64>;
 
 using bs = bitset<64>;
 
 using graph = vv;
 using matrix = vv;
 
-const d6 EPS = 1 / 1000000.0;
-const i6 INF = INT64_MAX / 4;
-const i6 NINF = -INF;
-const i6 ZERO = 0;
-const i6 _0 = ZERO;
-const i6 ONE = 1;
-const i6 _1 = ONE;
+const d64 EPS = 1 / 1000000.0;
+const i64 INF = INT64_MAX / 4;
+const i64 NINF = -INF;
+const i64 ZERO = 0;
+const i64 _0 = ZERO;
+const i64 ONE = 1;
+const i64 _1 = ONE;
 
 namespace std {
 template <typename T1, typename T2> struct hash<pair<T1, T2>> {
@@ -126,7 +119,7 @@ ostream &operator<<(ostream &stream, const pair<T1, T2> &p) {
 
 template <typename T> istream &operator>>(istream &stream, vec<T> &v) {
   if (v.empty()) {
-    u6 len;
+    u64 len;
     stream >> len;
     v.assign(len, T());
   }
@@ -188,78 +181,6 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-i64 solve_l(vector<i64> &v) {
-  stack<pair<i64, i64>> s;
-
-  i64 res = 0;
-  for (i64 i = 0; i < v.size(); i++) {
-    if (s.empty()) {
-      s.push({v[i], v[i]});
-      continue;
-    }
-
-    bool found = false;
-    while (!s.empty()) {
-      if (s.top().first >= v[i]) {
-        s.top().second = min(v[i], s.top().second);
-        s.push({v[i], min(v[i], s.top().second)});
-        res = max(v[i] - s.top().second, res);
-        found = true;
-        break;
-      } else {
-        i64 last = s.top().second;
-        s.pop();
-
-        if (!s.empty()) {
-          s.top().second = min(last, s.top().second);
-        }
-      }
-    }
-
-    if (!found) {
-      s.push({v[i], v[i]});
-    }
-  }
-
-  return res;
-}
-
-i64 solve_r(vector<i64> &v) {
-  stack<pair<i64, i64>> s;
-
-  i64 res = 0;
-  for (i64 i = v.size() - 1; i >= 0; i--) {
-    if (s.empty()) {
-      s.push({v[i], v[i]});
-      continue;
-    }
-
-    bool found = false;
-    while (!s.empty()) {
-      if (s.top().first >= v[i]) {
-        s.top().second = min(v[i], s.top().second);
-        s.push({v[i], min(v[i], s.top().second)});
-        res = max(v[i] - s.top().second, res);
-        found = true;
-        break;
-      } else {
-        i64 last = s.top().second;
-        s.pop();
-
-        if (!s.empty()) {
-          s.top().second = min(last, s.top().second);
-        }
-      }
-    }
-
-    if (!found) {
-      s.push({v[i], v[i]});
-    }
-  }
-
-  return res;
-}
-
 int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(0);
@@ -272,19 +193,111 @@ int main() {
   i64 n;
   cin >> n;
 
-  vector<i64> v(n);
+  string s;
+  cin >> s;
 
-  for (auto &c : v) {
-    cin >> c;
+  i64 t_left = 0;
+  i64 where_break = 0;
+  if (s[0] == '1') {
+    t_left++;
+    for (i64 i = 1; i < n; i++) {
+      if (i == n - 1) {
+        where_break = n - 1;
+      }
+
+      if (s[i] == '1') {
+        t_left++;
+      } else {
+        where_break = i + 1;
+        break;
+      }
+    }
   }
 
-  i64 res = solve_l(v);
-  i64 res1 = solve_r(v);
+  i64 t_right = 0;
+  i64 where_break2 = n - 1;
+  if (s[n - 1] == '1') {
+    t_right++;
+    for (i64 i = n - 2; i >= 0; i--) {
+      if (i == 0) {
+        where_break2 = 0;
+      }
 
-  cout << max(res, res1) << endl;
+      if (s[i] == '1') {
+        t_right++;
+      } else {
+        where_break2 = i - 1;
+        break;
+      }
+    }
+  }
+
+  // cout << where_break2 << " " << where_break << endl;
+  if (where_break > where_break2) {
+    cout << 1 << endl;
+    return 0;
+  }
+
+  vi64 groups;
+  i64 sum = t_right + t_left;
+  bool even = false;
+  i64 min_group = 1e9;
+
+  for (i64 i = where_break; i <= where_break2; i++) {
+    if (s[i] == '1') {
+      i64 count = 1;
+      for (i64 j = i + 1; j <= where_break2; j++) {
+        if (j == where_break2)
+          i = j;
+
+        if (s[j] == '1')
+          count++;
+        else {
+          i = j;
+          break;
+        }
+      }
+      groups.push_back(count);
+      min_group = min(count, min_group);
+      sum += count;
+
+      if (count & 0) {
+        even = true;
+      }
+    }
+  }
+
+  // cout << "AJUNS" << endl;
+
+  if (even) {
+    cout << sum << endl;
+    return 0;
+  } else {
+    if (t_right > 0 and t_left > 0) {
+      if (t_right % 2 == 0 and t_left % 2 == 1) {
+        cout << t_left - t_right << endl;
+      }
+    } else if (t_right > 0 and t_left == 0) {
+      cout << 4 << endl;
+    } else if (t_right == 0 and t_left > 0) {
+      cout << t_left << endl;
+    } else {
+      i64 res = 0;
+      i64 cc = min_group - 1;
+      for (auto &c : groups) {
+        res += (c / cc);
+      }
+      cout << res << endl;
+    }
+
+    return 0;
+  }
+
+  cout << 0 << endl;
 
   return 0;
 }
 
 /*
- */
+
+*/

@@ -51,7 +51,7 @@ using namespace __gnu_pbds;
 template <typename T> using vec = vector<T>;
 template <typename T> using deq = deque<T>;
 template <typename K, typename V> using umap = unordered_map<K, V>;
-
+template <typename K, typename V> using gmap = gp_hash_table<K, V>;
 template <typename K, typename V> using hmap = cc_hash_table<K, V>;
 
 using str = string;

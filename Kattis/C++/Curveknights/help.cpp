@@ -27,7 +27,7 @@ using namespace __gnu_pbds;
 #define g2 get<2>
 #define ft first
 #define sd second
-#define sz(x) (i6) x.size()
+#define sz(x) (i64) x.size()
 #define psb(x) push_back(x)
 #define pb(x) push_back(x)
 #define ppb(x) pop_back(x)
@@ -58,51 +58,44 @@ using str = string;
 using vb = vec<bool>;
 
 using byte = int8_t;
-using i3 = int32_t;
-using i6 = int64_t;
+using i32 = int32_t;
 using i64 = int64_t;
-using u3 = uint32_t;
-using u6 = uint64_t;
+using u32 = uint32_t;
 using u64 = uint64_t;
 
-using d6 = long double;
 using d64 = long double;
 
-using p3 = pair<i3, i3>;
-using vi3 = vec<i3>;
-using vp3 = vec<p3>;
+using p32 = pair<i32, i32>;
+using vi32 = vec<i32>;
+using vp32 = vec<p32>;
 
-using p6 = pair<i6, i6>;
 using p64 = pair<i64, i64>;
-using vi6 = vec<i6>;
 using vi64 = vec<i64>;
-using vd6 = vec<d6>;
 using vd64 = vec<d64>;
-using vp6 = vec<p6>;
 using vp64 = vec<p64>;
-using vv = vec<vi6>;
+using vv = vec<vi64>;
 using vs = vec<str>;
 
-using dp6 = deq<p6>;
-using di6 = deq<i6>;
+using dp64 = deq<p64>;
+using di64 = deq<i64>;
 
-using mi6 = map<i6, i6>;
-using mp6 = map<p6, i6>;
-using si6 = set<i6>;
-using hi6 = hmap<i6, i6>;
+using mi64 = map<i64, i64>;
+using mp64 = map<p64, i64>;
+using si64 = set<i64>;
+using hi64 = hmap<i64, i64>;
 
 using bs = bitset<64>;
 
 using graph = vv;
 using matrix = vv;
 
-const d6 EPS = 1 / 1000000.0;
-const i6 INF = INT64_MAX / 4;
-const i6 NINF = -INF;
-const i6 ZERO = 0;
-const i6 _0 = ZERO;
-const i6 ONE = 1;
-const i6 _1 = ONE;
+const d64 EPS = 1 / 1000000.0;
+const i64 INF = INT64_MAX / 4;
+const i64 NINF = -INF;
+const i64 ZERO = 0;
+const i64 _0 = ZERO;
+const i64 ONE = 1;
+const i64 _1 = ONE;
 
 namespace std {
 template <typename T1, typename T2> struct hash<pair<T1, T2>> {
@@ -126,7 +119,7 @@ ostream &operator<<(ostream &stream, const pair<T1, T2> &p) {
 
 template <typename T> istream &operator>>(istream &stream, vec<T> &v) {
   if (v.empty()) {
-    u6 len;
+    u64 len;
     stream >> len;
     v.assign(len, T());
   }
@@ -188,76 +181,29 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-i64 solve_l(vector<i64> &v) {
-  stack<pair<i64, i64>> s;
-
-  i64 res = 0;
-  for (i64 i = 0; i < v.size(); i++) {
-    if (s.empty()) {
-      s.push({v[i], v[i]});
-      continue;
-    }
-
-    bool found = false;
-    while (!s.empty()) {
-      if (s.top().first >= v[i]) {
-        s.top().second = min(v[i], s.top().second);
-        s.push({v[i], min(v[i], s.top().second)});
-        res = max(v[i] - s.top().second, res);
-        found = true;
-        break;
-      } else {
-        i64 last = s.top().second;
-        s.pop();
-
-        if (!s.empty()) {
-          s.top().second = min(last, s.top().second);
-        }
-      }
-    }
-
-    if (!found) {
-      s.push({v[i], v[i]});
+vi64 solve(vi64 res, const deque<i64> q, const vec<vp64> &g) {
+  for (auto e : q) {
+    for (auto c : g[e]) {
+      res[c.first] += res[e] * c.second;
     }
   }
 
   return res;
 }
 
-i64 solve_r(vector<i64> &v) {
-  stack<pair<i64, i64>> s;
+void dfs(vec<vp64> &g, deque<i64> &q, i64 node, vb &visit) {
+  visit[node] = true;
 
-  i64 res = 0;
-  for (i64 i = v.size() - 1; i >= 0; i--) {
-    if (s.empty()) {
-      s.push({v[i], v[i]});
+  for (auto &c : g[node]) {
+    if (visit[c.first]) {
       continue;
     }
 
-    bool found = false;
-    while (!s.empty()) {
-      if (s.top().first >= v[i]) {
-        s.top().second = min(v[i], s.top().second);
-        s.push({v[i], min(v[i], s.top().second)});
-        res = max(v[i] - s.top().second, res);
-        found = true;
-        break;
-      } else {
-        i64 last = s.top().second;
-        s.pop();
-
-        if (!s.empty()) {
-          s.top().second = min(last, s.top().second);
-        }
-      }
-    }
-
-    if (!found) {
-      s.push({v[i], v[i]});
-    }
+    visit[c.first] = true;
+    dfs(g, q, c.first, visit);
   }
 
-  return res;
+  q.push_front(node);
 }
 
 int main() {
@@ -269,22 +215,73 @@ int main() {
   ofstream cout{"output.txt"};
 #endif
 
-  i64 n;
-  cin >> n;
+  i64 n, m;
+  scanf("%ld %ld", &n, &m);
 
-  vector<i64> v(n);
+  vi64 list(n);
 
-  for (auto &c : v) {
-    cin >> c;
+  for (i64 i = 0; i < n; i++) {
+    scanf("%ld", &list[i]);
   }
 
-  i64 res = solve_l(v);
-  i64 res1 = solve_r(v);
+  vec<vp64> g(n);
 
-  cout << max(res, res1) << endl;
+  for (i64 i = 0; i < m; i++) {
+    i64 u, v, w;
+    scanf("%ld %ld %ld", &u, &v, &w);
+
+    g[v].push_back({u, w});
+  }
+
+  vi64 sol(n, 0);
+
+  for (i64 i = 0; i < n; i++) {
+    if (list[i] == 0) {
+      continue;
+    }
+
+    vector<bool> visit(n, false);
+    deque<i64> q;
+    dfs(g, q, i, visit);
+    vi64 crt(n);
+    crt[i] = list[i];
+    crt = solve(crt, q, g);
+
+    for (i64 i = 0; i < n; i++) {
+      sol[i] += crt[i];
+    }
+  }
+
+  for (auto &c : sol) {
+    cout << c << " ";
+  }
+  cout << endl;
 
   return 0;
 }
 
 /*
- */
+vector<int64> craft(int64 start, vector<int64> res, const deque<int64> order,
+const graph &g) { for (auto e : order) { for (auto c : g[e]) { res[c.first] +=
+res[e] * c.second;
+        }
+    }
+
+    return res;
+}
+
+void topsort(int64 node, deque<int64> &order, const graph &g, vector<bool> &vis)
+{ vis[node] = true;
+
+    for (auto next : g[node]) {
+        if (vis[next.first]) {
+            continue;
+        }
+
+        vis[next.first] = true;
+        topsort(next.first, order, g, vis);
+    }
+
+    order.push_front(node);
+}
+*/

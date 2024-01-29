@@ -197,11 +197,8 @@ int main() {
   ofstream cout{"output.txt"};
 #endif
 
-  string eep;
-  cin >> eep;
-
-  for (auto &x : eep) {
-  }
+  string s;
+  cin >> s;
 
   return 0;
 }
