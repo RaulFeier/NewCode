@@ -1,15 +1,9 @@
 #include "HEADER.h"
 
 int main() {
-  i64 x = 3;
-
-  if (x == 3) {
-    cout << "Mata" << endl;
-  } else {
-    cout << "Tata" << endl;
+  for (int i = 0; i < 10; i++) {
+    cout << i << endl;
   }
-
-  cout << "Hello, World!" << endl;
 
   return 0;
 }
