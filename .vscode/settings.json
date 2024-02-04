@@ -17,7 +17,8 @@
         "span": "cpp",
         "regex": "cpp",
         "valarray": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "ostream": "cpp"
     },
     "editor.cursorSmoothCaretAnimation": "on",
     "editor.smoothScrolling": true,
