@@ -51,7 +51,7 @@ using namespace __gnu_pbds;
 template <typename T> using vec = vector<T>;
 template <typename T> using deq = deque<T>;
 template <typename K, typename V> using umap = unordered_map<K, V>;
-
+template <typename K, typename V> using gmap = gp_hash_table<K, V>;
 template <typename K, typename V> using hmap = cc_hash_table<K, V>;
 
 using str = string;
@@ -181,97 +181,61 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-i64 r, c;
-i64 x, y;
-
-using pp6 = pair<i64, p64>;
-const i64 DIRX[8] = {1, 1, 1, -1, -1, -1, 0, 0};
-const i64 DIRY[8] = {1, 0, -1, 1, 0, -1, 1, -1};
-
-pair<i64, set<p64>> dij(i64 cl, const vv &bl) {
-  vv ans(r, vi64(c, INF));
-  map<p64, p64> pr;
-  pq<pp6, vec<pp6>, greater<pp6>> q;
-  ans[0][cl] = bl[0][cl];
-  pr[{0, cl}] = {-1, -1};
-  q.push({ans[0][cl], {0, cl}});
-  while (!q.empty()) {
-    pp6 p = q.top();
-    q.pop();
-    i64 dist = p.ft;
-    p64 node = p.second;
-    if (dist != ans[node.ft][node.sd]) {
-      continue;
-    }
-    for (int i = 0; i < 8; i++) {
-      i64 x = node.ft + DIRX[i];
-      i64 y = node.sd + DIRY[i];
-      if (x >= 0 && x < r && y >= 0 && y < c) {
-        i64 cand = dist + bl[x][y];
-        if (cand < ans[x][y]) {
-          ans[x][y] = cand;
-          q.push({cand, {x, y}});
-          pr[{x, y}] = node;
-        }
-      }
-    }
-  }
-  i64 sol_v = INF;
-  i64 sol = -1;
-  for (int i = 0; i < c; i++) {
-    if (sol_v > ans[r - 1][i]) {
-      sol_v = ans[r - 1][i];
-      sol = i;
-    }
-  }
-  p64 crt = {r - 1, sol};
-  set<p64> res;
-  while (crt.ft != -1) {
-    res.insert(crt);
-    crt = pr[crt];
-  }
-  return {sol_v, res};
-}
-
 int main() {
-  ios::sync_with_stdio(0);
+  ios_base::sync_with_stdio(false);
   cin.tie(0);
   cout.tie(0);
 #ifdef LOCAL
   ifstream cin{"input.txt"};
   ofstream cout{"output.txt"};
 #endif
-  char ch;
-  cin >> r >> c;
-  while (r > 0 && c > 0) {
-    vv bl(r, vi64(c, 0));
-    for (int i = 0; i < r; i++) {
-      for (int j = 0; j < c; j++) {
-        cin >> ch;
-        bl[i][j] = ch - '0';
+
+  i64 tc;
+  cin >> tc;
+
+  while (tc--) {
+    i64 n;
+    cin >> n;
+
+    vi64 v(n);
+    cin >> v;
+
+    i64 x = v[0];
+    i64 index_l = 0;
+    for (i64 i = 1; i < n; i++) {
+      index_l = i;
+      if (v[i] != x) {
+        break;
       }
     }
-    i64 sol = INF;
-    set<p64> solp;
-    for (int i = 0; i < c; i++) {
-      pair<i64, set<p64>> res = dij(i, bl);
-      if (sol > res.ft) {
-        sol = res.ft;
-        solp = res.sd;
+
+    i64 index_r = n - 1;
+    i64 y = v[n - 1];
+
+    for (i64 i = n - 2; i >= 0; i--) {
+      index_r = i;
+      if (v[i] != y) {
+        break;
       }
     }
-    for (int i = 0; i < r; i++) {
-      for (int j = 0; j < c; j++) {
-        if (solp.count({i, j}) == 0) {
-          cout << bl[i][j];
-        } else {
-          cout << " ";
-        }
-      }
-      cout << endl;
+
+    if (index_r == 0 and x == y) {
+      cout << 0 << endl;
+      continue;
     }
-    cout << endl;
-    cin >> r >> c;
+
+    if (x == y) {
+      cout << index_r - index_l + 1 << endl;
+    } else if (index_l > n - index_r - 1 and x != y) {
+      cout << n - index_l << endl;
+    } else {
+      cout << index_r + 1 << endl;
+    }
   }
+
   return 0;
 }
+
+/*
+
+*/

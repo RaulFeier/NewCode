@@ -181,76 +181,40 @@ template <typename T> number_range<T> range(T b, T e) {
 
 #endif
 
-i64 power_of_two(i64 n) {
-  i64 cnt = 1;
-  while (cnt < n) {
-    cnt *= 2;
-  }
-
-  return cnt;
-}
-
-class SegmentTree {
+class Fenwick {
 private:
-  int n;
-  int len;
-  vector<i64> tree;
+  vi64 ft;
+
+  i64 lsbl(i64 x) { return x & (-x); }
 
 public:
-  SegmentTree(vector<i64> &tree) {
-    n = tree.size();
-    len = power_of_two(n);
-    this->tree.resize(len * 2);
-    build(tree);
-  }
+  Fenwick(vi64 &v) {
+    i64 n = v.size() - 1;
+    ft.assign(n + 1, 0);
 
-  void build(vector<i64> &tree) {
-    for (int i = 0; i < n; i++) {
-      this->tree[i + len] = tree[i];
-    }
-
-    int start = len / 2;
-    int end = len;
-    while (start != 0) {
-      for (int index = start; index < end; index++) {
-        this->tree[index] = this->tree[index * 2] + this->tree[index * 2 + 1];
+    for (i64 i = 1; i <= n; i++) {
+      ft[i] += v[i];
+      if (i + lsbl(i) <= n) {
+        ft[i + lsbl(i)] += ft[i];
       }
-      start /= 2;
-      end /= 2;
     }
   }
 
-  void update(int pos, int value) {
-    pos = pos + len - 1;
-    this->tree[pos] = value;
-
-    pos = pos / 2;
-    while (pos > 0) {
-      this->tree[pos] = this->tree[pos * 2] + this->tree[pos * 2 + 1];
-      pos /= 2;
+  void update(i64 i, i64 value) {
+    while (i < ft.size()) {
+      ft[i] += value;
+      i += lsbl(i);
     }
   }
 
-  i64 query(i64 l, i64 r) {
-    l = l + len - 1;
-    r = r + len - 1;
-    i64 res = 0;
-
-    while (l <= r) {
-      if (l % 2 == 1) {
-        res += this->tree[l];
-        l++;
-      }
-      if (r % 2 == 0) {
-        res += this->tree[r];
-        r--;
-      }
-
-      r /= 2;
-      l /= 2;
+  i64 rsq(i64 i) {
+    i64 sum = 0;
+    while (i > 0) {
+      sum += ft[i];
+      i -= lsbl(i);
     }
 
-    return res;
+    return sum;
   }
 };
 
@@ -275,10 +239,24 @@ int main() {
   for (i64 i : range(n)) {
     char c;
     cin >> c;
-    array[i] = v[c - '0' - 1];
+    array[i] = c - '0' - 1;
   }
 
-  SegmentTree tree(array);
+  vector<Fenwick> trees;
+
+  for (i64 i = 0; i < 6; i++) {
+    vi64 tree;
+    tree.push_back(0);
+    for (auto &c : array) {
+      if (c == i) {
+        tree.push_back(1);
+      } else {
+        tree.push_back(0);
+      }
+    }
+
+    trees.push_back(Fenwick(tree));
+  }
 
   while (q--) {
     i64 type;
@@ -288,7 +266,10 @@ int main() {
       i64 k, p;
       cin >> k >> p;
       p--;
-      tree.update(k, v[p]);
+      trees[array[k - 1]].update(k, -1);
+
+      array[k - 1] = p;
+      trees[array[k - 1]].update(k, 1);
     } else if (type == 2) {
       i64 p, value;
       cin >> p >> value;
@@ -297,7 +278,13 @@ int main() {
     } else {
       i64 l, r;
       cin >> l >> r;
-      cout << tree.query(l, r) << endl;
+      i64 ans = 0;
+
+      for (i64 i : range(6)) {
+        ans += ((trees[i].rsq(r) - trees[i].rsq(l - 1)) * v[i]);
+      }
+
+      cout << ans << endl;
     }
   }
 
@@ -305,5 +292,20 @@ int main() {
 }
 
 /*
+5 5 5 1 3 6 4 2
 
+1: 0 0 0 1 0 0 0 0
+2: 0 0 0 0 0 0 0 1
+3: 0 0 0 0 1 0 0 0
+4: 0 0 0 0 0 0 1 0
+5: 1 1 1 0 0 0 0 0
+6: 1 0 0 0 0 1 0 0
+    1   0   1   0
+      1       1
+          2
+
+0 1 1 0 0 0 0 0
+ 1   1   0   0
+   2       0
+       2
 */

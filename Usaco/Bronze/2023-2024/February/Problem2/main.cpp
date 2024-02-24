@@ -1,3 +1,16 @@
+/*    ___                       ___           ___
+     /\__\          ___        /\  \         /\__\
+    /::|  |        /\  \      /::\  \       /:/  /
+   /:|:|  |        \:\  \    /:/\ \  \     /:/  /
+  /:/|:|__|__      /::\__\  _\:\~\ \  \   /:/  /  ___
+ /:/ |::::\__\  __/:/\/__/ /\ \:\ \ \__\ /:/__/  /\__\
+ \/__/~~/:/  / /\/:/  /    \:\ \:\ \/__/ \:\  \ /:/  /
+       /:/  /  \::/__/      \:\ \:\__\    \:\  /:/  /
+      /:/  /    \:\__\       \:\/:/  /     \:\/:/  /
+     /:/  /      \/__/        \::/  /       \::/  /
+     \/__/                     \/__/         \/__/
+*/
+
 #ifndef __AHA__HEADER
 #define __AHA__HEADER
 
@@ -14,7 +27,7 @@ using namespace __gnu_pbds;
 #define g2 get<2>
 #define ft first
 #define sd second
-#define sz(x) (i6) x.size()
+#define sz(x) (i64) x.size()
 #define psb(x) push_back(x)
 #define pb(x) push_back(x)
 #define ppb(x) pop_back(x)
@@ -38,58 +51,51 @@ using namespace __gnu_pbds;
 template <typename T> using vec = vector<T>;
 template <typename T> using deq = deque<T>;
 template <typename K, typename V> using umap = unordered_map<K, V>;
-
+template <typename K, typename V> using gmap = gp_hash_table<K, V>;
 template <typename K, typename V> using hmap = cc_hash_table<K, V>;
 
 using str = string;
 using vb = vec<bool>;
 
 using byte = int8_t;
-using i3 = int32_t;
-using i6 = int64_t;
+using i32 = int32_t;
 using i64 = int64_t;
-using i128 = __int128_t;
-using u3 = uint32_t;
-using u6 = uint64_t;
+using u32 = uint32_t;
 using u64 = uint64_t;
 
-using d6 = long double;
 using d64 = long double;
 
-using p3 = pair<i3, i3>;
-using vi3 = vec<i3>;
-using vp3 = vec<p3>;
+using p32 = pair<i32, i32>;
+using vi32 = vec<i32>;
+using vp32 = vec<p32>;
 
-using p6 = pair<i6, i6>;
 using p64 = pair<i64, i64>;
-using vi6 = vec<i6>;
 using vi64 = vec<i64>;
-using vd6 = vec<d6>;
 using vd64 = vec<d64>;
-using vp6 = vec<p6>;
 using vp64 = vec<p64>;
-using vv = vec<vi6>;
+using vv = vec<vi64>;
+using vs = vec<str>;
 
-using dp6 = deq<p6>;
-using di6 = deq<i6>;
+using dp64 = deq<p64>;
+using di64 = deq<i64>;
 
-using mi6 = map<i6, i6>;
-using mp6 = map<p6, i6>;
-using si6 = set<i6>;
-using hi6 = hmap<i6, i6>;
+using mi64 = map<i64, i64>;
+using mp64 = map<p64, i64>;
+using si64 = set<i64>;
+using hi64 = hmap<i64, i64>;
 
 using bs = bitset<64>;
 
 using graph = vv;
 using matrix = vv;
 
-const d6 EPS = 1 / 1000000.0;
-const i6 INF = INT64_MAX / 4;
-const i6 NINF = -INF;
-const i6 ZERO = 0;
-const i6 _0 = ZERO;
-const i6 ONE = 1;
-const i6 _1 = ONE;
+const d64 EPS = 1 / 1000000.0;
+const i64 INF = INT64_MAX / 4;
+const i64 NINF = -INF;
+const i64 ZERO = 0;
+const i64 _0 = ZERO;
+const i64 ONE = 1;
+const i64 _1 = ONE;
 
 namespace std {
 template <typename T1, typename T2> struct hash<pair<T1, T2>> {
@@ -113,7 +119,7 @@ ostream &operator<<(ostream &stream, const pair<T1, T2> &p) {
 
 template <typename T> istream &operator>>(istream &stream, vec<T> &v) {
   if (v.empty()) {
-    u6 len;
+    u64 len;
     stream >> len;
     v.assign(len, T());
   }
@@ -124,28 +130,6 @@ template <typename T> istream &operator>>(istream &stream, vec<T> &v) {
 }
 
 template <typename T> ostream &operator<<(ostream &stream, const vec<T> &v) {
-  if (!v.empty()) {
-    stream << v[0];
-  }
-  for (auto i = 1; i < sz(v); i++) {
-    stream << " " << v[i];
-  }
-  return stream;
-}
-
-template <typename T> istream &operator>>(istream &stream, deq<T> &v) {
-  if (v.empty()) {
-    u6 len;
-    stream >> len;
-    v.assign(len, T());
-  }
-  for (auto i = 0; i < sz(v); i++) {
-    stream >> v[i];
-  }
-  return stream;
-}
-
-template <typename T> ostream &operator<<(ostream &stream, const deq<T> &v) {
   if (!v.empty()) {
     stream << v[0];
   }
@@ -194,7 +178,18 @@ template <typename T> number_range<T> range(T e) {
 template <typename T> number_range<T> range(T b, T e) {
   return number_range<T>(b, e);
 }
+
 #endif
+
+void dfs(vec<vec<p64>> &g, i64 node, vec<bool> &visit, i64 m) {
+  if (g[node].size() > 1) {
+    for (auto &c : g[node]) {
+      if (visit[c.first]) {
+        c.second = m;
+      }
+    }
+  }
+}
 
 int main() {
   ios_base::sync_with_stdio(false);
@@ -205,48 +200,105 @@ int main() {
   ofstream cout{"output.txt"};
 #endif
 
-  i64 n;
+  i64 n, m;
+  cin >> n >> m;
 
-  while (cin >> n) {
-    if (n == 0) {
-      return 0;
-    }
+  string s;
+  cin >> s;
 
-    string ans;
-    i64 m;
-    i64 t1 = 0, t2 = 0;
+  i64 sum = 0;
+  vector<i64> v(n);
+  for (i64 i = 0; i < n; i++) {
+    cin >> v[i];
+    sum += v[i];
+  }
 
-    for (i64 i = 0; i < n; i++) {
-      cin >> ans >> m;
-      if (ans == "DROP") {
-        cout << "DROP " << 2 << " " << m << endl;
-        t2 += m;
-      } else {
-        if (t1 >= m) {
-          cout << "TAKE 1 " << m << endl;
-          t1 -= m;
-        } else {
-          i64 left = m - t1;
-          if (t1 > 0) {
-            cout << "TAKE 1 " << t1 << endl;
-          }
-          t1 = 0;
-          t1 = t2;
-          cout << "MOVE 2->1 " << t2 << endl;
-          t2 = 0;
-          cout << "TAKE 1 " << left << endl;
-          t1 -= left;
+  for (i64 i = 0; i < n; i++) {
+    if (i == 0) {
+      if (s[i] == 'R' and s[i + 1] == 'L') {
+        if (s[n - 1] == 'R') {
+          sum -= min(m, v[n - 1]);
+        }
+      } else if (s[n - 1] == 'R' and s[i] == 'L') {
+        if (s[i + 1] == 'L') {
+          sum -= min(m, v[i + 1]);
+        }
+      }
+    } else if (i == n - 1) {
+      if (s[i] == 'R' and s[0] == 'L') {
+        if (s[i - 1] == 'R') {
+          sum -= min(m, v[i - 1]);
+        }
+      } else if (s[i - 1] == 'R' and s[i] == 'L') {
+        if (s[0] == 'L') {
+          sum -= min(m, v[0]);
+        }
+      }
+    } else {
+      if (s[i] == 'R' and s[i + 1] == 'L') {
+        if (s[i - 1] == 'R') {
+          sum -= min(m, v[i - 1]);
+        }
+      } else if (s[i - 1] == 'R' and s[i] == 'L') {
+        if (s[i + 1] == 'L') {
+          sum -= min(m, v[i + 1]);
         }
       }
     }
-    cout << endl;
   }
+  cout << sum << endl;
+
+  return 0;
+
+  // i64 sum = 0;
+  vector<i64> bc(n);
+  for (i64 i = 0; i < n; i++) {
+    cin >> bc[i];
+    sum += bc[i];
+  }
+
+  vector<vector<p64>> g(n);
+  for (i64 i = 0; i < n; i++) {
+    if (i == 0) {
+      if (s[i] == 'L') {
+        g[n - 1].push_back({i, min(bc[i], m)});
+      } else {
+        g[i + 1].push_back({i, min(bc[i], m)});
+      }
+    } else if (i == n - 1) {
+      if (s[i] == 'R') {
+        g[0].push_back({i, min(bc[i], m)});
+      } else {
+        g[i - 1].push_back({i, min(bc[i], m)});
+      }
+    } else {
+      if (s[i] == 'R') {
+        g[i + 1].push_back({i, min(bc[i], m)});
+      } else {
+        g[i - 1].push_back({i, min(bc[i], m)});
+      }
+    }
+  }
+
+  i64 lost = 0;
+  for (i64 i = 0; i < n; i++) {
+    if (g[i].size() > 1) {
+      i64 cnt = 0;
+      for (auto &c : g[i]) {
+        if (g[c.first].size() > 1) {
+          c.second = m;
+        }
+        cnt += c.second;
+      }
+      lost += (cnt - m);
+    }
+  }
+
+  cout << sum - lost << endl;
 
   return 0;
 }
 
 /*
-0 0
-100 0
 
 */
