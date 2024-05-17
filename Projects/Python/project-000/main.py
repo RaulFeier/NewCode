@@ -1,10 +1,4 @@
-def main():
-    n = int(input())
-    arr = list(map(int, input().split()))
+n = int(input())
 
-    print(type(arr))
-
-    print(arr)
-
-
-main()
+for i in range(n):
+    print(i)
