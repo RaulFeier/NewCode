@@ -14,9 +14,9 @@ int main() {
     cout << "eep" << endl;
   }
 
-  cout << add(n, m) << endl;
-
-  cout << "Hello, world!" << endl;
+  for (int i = 0; i < n; i++) {
+    cout << add(i, n) << endl;
+  }
 
   return 0;
 }
