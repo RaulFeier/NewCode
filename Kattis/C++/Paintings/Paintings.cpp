@@ -69,8 +69,6 @@ using mp64 = map<p64, i64>;
 using si64 = set<i64>;
 using hi64 = hmap<i64, i64>;
 
-using bs = bitset<64>;
-
 using graph = vv;
 using matrix = vv;
 
@@ -118,74 +116,99 @@ template <typename T> ostream &operator<<(ostream &stream, const vec<T> &v) {
 
 #endif
 
-void solve() {
-  int N;
-  cin >> N;
+bitset<20> bs;
+int N;
+vector<int> best;
 
-  vec<int> colors(N);
-  map<str, int> m;
-  vector<int> best(N);
+void best_sol(vector<int> &sol) {
+  for (int i = 0; i < N; i++) {
+    if (best[i] < sol[i]) {
+      break;
+    } else if (sol[i] < best[i]) {
+      best = sol;
+      break;
+    }
+  }
+}
+
+int cnt = 0;
+
+void solve(int pos, vector<int> &sol, map<int, vector<int>> &p) {
+  if (pos == N) {
+    best_sol(sol);
+    cnt++;
+    return;
+  }
 
   for (int i = 0; i < N; i++) {
-    str c;
-    cin >> c;
-    m[c] = i;
-    colors[i] = i;
+    if (!bs[i]) {
+      if (sol.empty()) {
+        sol.push_back(i);
+        bs[i] = 1;
+        solve(pos + 1, sol, p);
+        bs[i] = 0;
+        sol.pop_back();
+      } else {
+        bool can_put = true;
+        for (auto &c : p[i]) {
+          if (sol[pos - 1] == c) {
+            can_put = false;
+            break;
+          }
+        }
+
+        if (can_put) {
+          sol.push_back(i);
+          bs[i] = 1;
+          solve(pos + 1, sol, p);
+          bs[i] = 0;
+          sol.pop_back();
+        }
+      }
+    }
+  }
+}
+
+void solve() {
+  cin >> N;
+
+  map<string, int> m;
+  vector<string> s(N);
+  best.resize(N, 0);
+  cnt = 0;
+
+  for (int i = 0; i < N; i++) {
+    string a;
+    cin >> a;
+
+    m[a] = i;
+    s[i] = a;
     best[i] = N - 1 - i;
   }
 
   int M;
   cin >> M;
 
-  map<int, vec<int>> p;
-
+  map<int, vector<int>> p;
   for (int i = 0; i < M; i++) {
-    str a, b;
+    string a, b;
     cin >> a >> b;
 
-    int a1 = m[a];
-    int b1 = m[b];
-    p[a1].push_back(b1);
-    p[b1].push_back(a1);
+    int x = m[a];
+    int y = m[b];
+
+    p[x].push_back(y);
+    p[y].push_back(x);
   }
 
-  int cnt = 0;
+  vector<int> sol;
+  solve(0, sol, p);
+  cout << cnt << '\n';
 
-  do {
-    bool good = true;
-    for (int i = 0; i < N; i++) {
-      for (auto &c : p[colors[i]]) {
-        if (i > 0 and c == colors[i - 1]) {
-          good = false;
-          break;
-        }
-
-        if (i < N - 1 and c == colors[i + 1]) {
-          good = false;
-          break;
-        }
-      }
-
-      if (!good) {
-        break;
-      }
-    }
-
-    if (good) {
-      cnt++;
-      for (int i = 0; i < N; i++) {
-        if (colors[i] < best[i]) {
-          best = colors;
-          break;
-        }
-      }
-    }
-  } while (next_permutation(colors.begin(), colors.end()));
-
-  cout << cnt << endl;
   for (auto &c : best) {
-    cout << m[c] << " ";
+    cout << s[c] << " ";
   }
+  cout << '\n';
 }
 
 int main() {
