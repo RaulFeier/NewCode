@@ -1,19 +1,14 @@
-/*    ___                       ___           ___
-     /\__\          ___        /\  \         /\__\
-    /::|  |        /\  \      /::\  \       /:/  /
-   /:|:|  |        \:\  \    /:/\ \  \     /:/  /
-  /:/|:|__|__      /::\__\  _\:\~\ \  \   /:/  /  ___
- /:/ |::::\__\  __/:/\/__/ /\ \:\ \ \__\ /:/__/  /\__\
- \/__/~~/:/  / /\/:/  /    \:\ \:\ \/__/ \:\  \ /:/  /
-       /:/  /  \::/__/      \:\ \:\__\    \:\  /:/  /
-      /:/  /    \:\__\       \:\/:/  /     \:\/:/  /
-     /:/  /      \/__/        \::/  /       \::/  /
-     \/__/                     \/__/         \/__/
+/*
+
+Author: RaulFeier1
+Time: 2024-07-25 15:49:01
+
 */
 
 #ifndef __AHA__HEADER
 #define __AHA__HEADER
 
+#include <algorithm>
 #include <bits/stdc++.h>
 
 #include <ext/pb_ds/assoc_container.hpp>
@@ -28,24 +23,14 @@ using namespace __gnu_pbds;
 #define ft first
 #define sd second
 #define sz(x) (i64) x.size()
-#define psb(x) push_back(x)
 #define pb(x) push_back(x)
-#define ppb(x) pop_back(x)
 #define pp(x) pop_back(x)
-#define bg(x) x.begin()
-#define ed(x) x.end()
-#define col(x) x.begin(), x.end()
+#define all(x) x.begin(), x.end()
 #define srt(x) sort(x.begin(), x.end())
 #define rvs(x) reverse(x.begin(), x.end())
 
 #define pq priority_queue
 #define fn function
-#ifdef LOCAL
-// #define git stauDBG_MACRO_NO_WARNING
-// #include <dbg.h>
-#else
-#define dbg(...)
-#endif
 #define endl '\n'
 
 template <typename T> using vec = vector<T>;
@@ -97,14 +82,6 @@ const i64 _0 = ZERO;
 const i64 ONE = 1;
 const i64 _1 = ONE;
 
-namespace std {
-template <typename T1, typename T2> struct hash<pair<T1, T2>> {
-  std::size_t operator()(const pair<T1, T2> &pair) const noexcept {
-    return hash<T1>()(pair.first) ^ hash<T2>()(pair.second);
-  }
-};
-} // namespace std
-
 template <typename T1, typename T2>
 istream &operator>>(istream &stream, pair<T1, T2> &p) {
   stream >> p.ft;
@@ -139,47 +116,77 @@ template <typename T> ostream &operator<<(ostream &stream, const vec<T> &v) {
   return stream;
 }
 
-template <typename T> inline T pop(vector<T> &stack) {
-  T top = stack.back();
-  stack.pop_back();
-  return top;
-}
-
-template <typename T> inline T popb(deq<T> &que) {
-  T top = que.back();
-  que.pop_back();
-  return top;
-}
-
-template <typename T> inline T popf(deq<T> &que) {
-  T top = que.front();
-  que.pop_front();
-  return top;
-}
-
-template <typename T>
-struct number_iterator : std::iterator<random_access_iterator_tag, T> {
-  T v;
-  number_iterator(T _v) : v(_v) {}
-  operator T &() { return v; }
-  T operator*() const { return v; }
-};
-template <typename T> struct number_range {
-  T b, e;
-  number_range(T b, T e) : b(b), e(e) {}
-  number_iterator<T> begin() { return b; }
-  number_iterator<T> end() { return e; }
-};
-
-template <typename T> number_range<T> range(T e) {
-  return number_range<T>(0, e);
-}
-
-template <typename T> number_range<T> range(T b, T e) {
-  return number_range<T>(b, e);
-}
-
 #endif
+
+void solve() {
+  int N;
+  cin >> N;
+
+  vec<int> colors(N);
+  map<str, int> m;
+  vector<int> best(N);
+
+  for (int i = 0; i < N; i++) {
+    str c;
+    cin >> c;
+    m[c] = i;
+    colors[i] = i;
+    best[i] = N - 1 - i;
+  }
+
+  int M;
+  cin >> M;
+
+  map<int, vec<int>> p;
+
+  for (int i = 0; i < M; i++) {
+    str a, b;
+    cin >> a >> b;
+
+    int a1 = m[a];
+    int b1 = m[b];
+    p[a1].push_back(b1);
+    p[b1].push_back(a1);
+  }
+
+  int cnt = 0;
+
+  do {
+    bool good = true;
+    for (int i = 0; i < N; i++) {
+      for (auto &c : p[colors[i]]) {
+        if (i > 0 and c == colors[i - 1]) {
+          good = false;
+          break;
+        }
+
+        if (i < N - 1 and c == colors[i + 1]) {
+          good = false;
+          break;
+        }
+      }
+
+      if (!good) {
+        break;
+      }
+    }
+
+    if (good) {
+      cnt++;
+      for (int i = 0; i < N; i++) {
+        if (colors[i] < best[i]) {
+          best = colors;
+          break;
+        }
+      }
+    }
+  } while (next_permutation(colors.begin(), colors.end()));
+
+  cout << cnt << endl;
+  for (auto &c : best) {
+    cout << m[c] << " ";
+  }
+}
 
 int main() {
   ios_base::sync_with_stdio(false);
@@ -189,6 +196,13 @@ int main() {
   ifstream cin{"input.txt"};
   ofstream cout{"output.txt"};
 #endif
+
+  i64 tct;
+  cin >> tct;
+
+  while (tct--) {
+    solve();
+  }
 
   return 0;
 }

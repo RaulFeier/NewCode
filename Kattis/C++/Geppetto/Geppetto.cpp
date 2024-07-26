@@ -1,14 +1,8 @@
-/*    ___                       ___           ___
-     /\__\          ___        /\  \         /\__\
-    /::|  |        /\  \      /::\  \       /:/  /
-   /:|:|  |        \:\  \    /:/\ \  \     /:/  /
-  /:/|:|__|__      /::\__\  _\:\~\ \  \   /:/  /  ___
- /:/ |::::\__\  __/:/\/__/ /\ \:\ \ \__\ /:/__/  /\__\
- \/__/~~/:/  / /\/:/  /    \:\ \:\ \/__/ \:\  \ /:/  /
-       /:/  /  \::/__/      \:\ \:\__\    \:\  /:/  /
-      /:/  /    \:\__\       \:\/:/  /     \:\/:/  /
-     /:/  /      \/__/        \::/  /       \::/  /
-     \/__/                     \/__/         \/__/
+/*
+
+Author: RaulFeier1
+Time: 2024-07-25 14:44:41
+
 */
 
 #ifndef __AHA__HEADER
@@ -16,6 +10,7 @@
 
 #include <bits/stdc++.h>
 
+#include <bitset>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 
@@ -28,24 +23,14 @@ using namespace __gnu_pbds;
 #define ft first
 #define sd second
 #define sz(x) (i64) x.size()
-#define psb(x) push_back(x)
 #define pb(x) push_back(x)
-#define ppb(x) pop_back(x)
 #define pp(x) pop_back(x)
-#define bg(x) x.begin()
-#define ed(x) x.end()
-#define col(x) x.begin(), x.end()
+#define all(x) x.begin(), x.end()
 #define srt(x) sort(x.begin(), x.end())
 #define rvs(x) reverse(x.begin(), x.end())
 
 #define pq priority_queue
 #define fn function
-#ifdef LOCAL
-// #define git stauDBG_MACRO_NO_WARNING
-// #include <dbg.h>
-#else
-#define dbg(...)
-#endif
 #define endl '\n'
 
 template <typename T> using vec = vector<T>;
@@ -97,14 +82,6 @@ const i64 _0 = ZERO;
 const i64 ONE = 1;
 const i64 _1 = ONE;
 
-namespace std {
-template <typename T1, typename T2> struct hash<pair<T1, T2>> {
-  std::size_t operator()(const pair<T1, T2> &pair) const noexcept {
-    return hash<T1>()(pair.first) ^ hash<T2>()(pair.second);
-  }
-};
-} // namespace std
-
 template <typename T1, typename T2>
 istream &operator>>(istream &stream, pair<T1, T2> &p) {
   stream >> p.ft;
@@ -139,47 +116,74 @@ template <typename T> ostream &operator<<(ostream &stream, const vec<T> &v) {
   return stream;
 }
 
-template <typename T> inline T pop(vector<T> &stack) {
-  T top = stack.back();
-  stack.pop_back();
-  return top;
-}
-
-template <typename T> inline T popb(deq<T> &que) {
-  T top = que.back();
-  que.pop_back();
-  return top;
-}
-
-template <typename T> inline T popf(deq<T> &que) {
-  T top = que.front();
-  que.pop_front();
-  return top;
-}
-
-template <typename T>
-struct number_iterator : std::iterator<random_access_iterator_tag, T> {
-  T v;
-  number_iterator(T _v) : v(_v) {}
-  operator T &() { return v; }
-  T operator*() const { return v; }
-};
-template <typename T> struct number_range {
-  T b, e;
-  number_range(T b, T e) : b(b), e(e) {}
-  number_iterator<T> begin() { return b; }
-  number_iterator<T> end() { return e; }
-};
-
-template <typename T> number_range<T> range(T e) {
-  return number_range<T>(0, e);
-}
-
-template <typename T> number_range<T> range(T b, T e) {
-  return number_range<T>(b, e);
-}
-
 #endif
+
+#define LSOne(S) (S & (-S))
+
+void solve() {
+  int N, M;
+  cin >> N >> M;
+
+  set<p32> s;
+
+  for (int i = 0; i < M; i++) {
+    int a, b;
+    cin >> a >> b;
+
+    if (a > b) {
+      swap(a, b);
+    }
+
+    s.insert({a, b});
+  }
+
+  int cnt = 1;
+  bitset<21> b;
+
+  for (int i = 1; i < (1 << N); i++) {
+    b.set();
+    // for (int j = 0; j < N; j++) {
+    //   if (i & (1 << j)) {
+    //     b[j] = 0;
+    //   }
+    // }
+
+    int mask = i;
+    while (mask) {
+      int two = LSOne(mask);
+      int j = __builtin_ctz(two);
+      b[j] = 0;
+      mask -= two;
+    }
+
+    bool good = true;
+    for (int index = 1; index <= N; index++) {
+      if (!b[index - 1]) {
+        for (auto &c : s) {
+          if (c.first == index) {
+            if (!b[c.second - 1]) {
+              good = false;
+              break;
+            }
+          } else if (c.second == index) {
+            if (!b[c.first - 1]) {
+              good = false;
+              break;
+            }
+          }
+        }
+
+        if (!good)
+          break;
+      }
+    }
+
+    if (good)
+      cnt++;
+  }
+
+  cout << cnt << endl;
+}
 
 int main() {
   ios_base::sync_with_stdio(false);
@@ -189,6 +193,8 @@ int main() {
   ifstream cin{"input.txt"};
   ofstream cout{"output.txt"};
 #endif
+
+  solve();
 
   return 0;
 }

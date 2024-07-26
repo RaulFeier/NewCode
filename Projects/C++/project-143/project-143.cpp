@@ -1,14 +1,8 @@
-/*    ___                       ___           ___
-     /\__\          ___        /\  \         /\__\
-    /::|  |        /\  \      /::\  \       /:/  /
-   /:|:|  |        \:\  \    /:/\ \  \     /:/  /
-  /:/|:|__|__      /::\__\  _\:\~\ \  \   /:/  /  ___
- /:/ |::::\__\  __/:/\/__/ /\ \:\ \ \__\ /:/__/  /\__\
- \/__/~~/:/  / /\/:/  /    \:\ \:\ \/__/ \:\  \ /:/  /
-       /:/  /  \::/__/      \:\ \:\__\    \:\  /:/  /
-      /:/  /    \:\__\       \:\/:/  /     \:\/:/  /
-     /:/  /      \/__/        \::/  /       \::/  /
-     \/__/                     \/__/         \/__/
+/*
+
+Author: RaulFeier1
+Time: 2024-06-28 11:05:09
+
 */
 
 #ifndef __AHA__HEADER
@@ -28,24 +22,14 @@ using namespace __gnu_pbds;
 #define ft first
 #define sd second
 #define sz(x) (i64) x.size()
-#define psb(x) push_back(x)
 #define pb(x) push_back(x)
-#define ppb(x) pop_back(x)
 #define pp(x) pop_back(x)
-#define bg(x) x.begin()
-#define ed(x) x.end()
-#define col(x) x.begin(), x.end()
+#define all(x) x.begin(), x.end()
 #define srt(x) sort(x.begin(), x.end())
 #define rvs(x) reverse(x.begin(), x.end())
 
 #define pq priority_queue
 #define fn function
-#ifdef LOCAL
-// #define git stauDBG_MACRO_NO_WARNING
-// #include <dbg.h>
-#else
-#define dbg(...)
-#endif
 #define endl '\n'
 
 template <typename T> using vec = vector<T>;
@@ -97,14 +81,6 @@ const i64 _0 = ZERO;
 const i64 ONE = 1;
 const i64 _1 = ONE;
 
-namespace std {
-template <typename T1, typename T2> struct hash<pair<T1, T2>> {
-  std::size_t operator()(const pair<T1, T2> &pair) const noexcept {
-    return hash<T1>()(pair.first) ^ hash<T2>()(pair.second);
-  }
-};
-} // namespace std
-
 template <typename T1, typename T2>
 istream &operator>>(istream &stream, pair<T1, T2> &p) {
   stream >> p.ft;
@@ -139,47 +115,51 @@ template <typename T> ostream &operator<<(ostream &stream, const vec<T> &v) {
   return stream;
 }
 
-template <typename T> inline T pop(vector<T> &stack) {
-  T top = stack.back();
-  stack.pop_back();
-  return top;
-}
-
-template <typename T> inline T popb(deq<T> &que) {
-  T top = que.back();
-  que.pop_back();
-  return top;
-}
-
-template <typename T> inline T popf(deq<T> &que) {
-  T top = que.front();
-  que.pop_front();
-  return top;
-}
-
-template <typename T>
-struct number_iterator : std::iterator<random_access_iterator_tag, T> {
-  T v;
-  number_iterator(T _v) : v(_v) {}
-  operator T &() { return v; }
-  T operator*() const { return v; }
-};
-template <typename T> struct number_range {
-  T b, e;
-  number_range(T b, T e) : b(b), e(e) {}
-  number_iterator<T> begin() { return b; }
-  number_iterator<T> end() { return e; }
-};
-
-template <typename T> number_range<T> range(T e) {
-  return number_range<T>(0, e);
-}
-
-template <typename T> number_range<T> range(T b, T e) {
-  return number_range<T>(b, e);
-}
-
 #endif
+
+const i64 MOD = 224737;
+
+inline i64 mod(i64 n) {
+  // if n cannot be negative for significant speed gain replace this with
+  return n < MOD ? n : n % MOD;
+
+  // if n is negetive use this
+  // return ((n % MOD) + MOD) % MOD; // MOD here is 1e9 + 7;
+}
+
+inline i64 mult(i64 x, i64 y) { return (x * y) % MOD; }
+
+i64 fact(i64 n) {
+  if (n == 0 or n == 1)
+    return 1;
+
+  return mod(mod(n) * fact(n - 1));
+}
+
+i64 bpow(i64 a, i64 b) {
+  if (b == 0)
+    return 1;
+  if (b == 1)
+    return mod(a);
+  if (b % 2 == 0) {
+    i64 ans = bpow(a, b / 2);
+    return mult(ans, ans);
+  } else {
+    return mult(bpow(a, b - 1), mod(a));
+  }
+}
+
+i64 ifact(i64 n) {
+  i64 x = fact(n);
+  return bpow(x, MOD - 2);
+}
+
+i64 arn(i64 n, i64 k) {
+  if (n < k)
+    return 0;
+
+  return mult(fact(n), ifact(n - k));
+}
 
 int main() {
   ios_base::sync_with_stdio(false);
@@ -189,6 +169,11 @@ int main() {
   ifstream cin{"input.txt"};
   ofstream cout{"output.txt"};
 #endif
+
+  i64 n, m;
+  cin >> m >> n;
+
+  cout << arn(n, m) << endl;
 
   return 0;
 }

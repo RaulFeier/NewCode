@@ -9,9 +9,11 @@ int main() {
   cin >> n >> m;
 
   vector<int> v(n);
+  vector<int> A(n);
+
 
   for (int i = 0; i < n; i++) {
-    cout << "eep" << endl;
+    cin >> v[i];
   }
 
   cout << add(n, m) << endl;
