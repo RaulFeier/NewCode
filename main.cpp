@@ -9,16 +9,14 @@ int main() {
   cin >> n >> m;
 
   vector<int> v(n);
-  vector<int> A(n);
-
 
   for (int i = 0; i < n; i++) {
-    cin >> v[i];
+    cout << "eep" << endl;
   }
 
-  cout << add(n, m) << endl;
-
-  cout << "Hello, world!" << endl;
+  for (int i = 0; i < n; i++) {
+    cout << add(i, n) << endl;
+  }
 
   return 0;
 }
